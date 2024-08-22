@@ -1,57 +1,39 @@
-import { Major, University } from "../data";
-import { ADD_TO_GOAL, REMOVE_FROM_GOAL } from "./action";
+//FIXME: NEED CHANGE IN NEW PJ: Add action types and action creators here
 
-export interface GoalState {
-    uniItem: University;
-    majorItem: Major;
-}
+import { TreeItem } from "../data";
+import { ADD_TO_FAV, REMOVE_FROM_FAV, ADD_TO_ADDED, REMOVE_FROM_ADDED, initialState, Action, State } from "./index";
 
-export const initialState: GoalState[] = []
-
-const goalReducer = (state = initialState, action: any) => {
-    console.log(`Action: ${action}`);
-    console.log(`Previous state: ${state}`);
-
+export default function treeReducer(state = initialState, action: Action): State {
     switch (action.type) {
-        case ADD_TO_GOAL:
+        case ADD_TO_FAV:
+            if (state.fav.some((item: TreeItem) => item.id === action.payload.id)) {
+                return state;
+            } else {
+                return {
+                    ...state,
+                    fav: [...state.fav, action.payload]
+                };
+            }
+        case REMOVE_FROM_FAV:
             return {
                 ...state,
-                uniItem: action.payload.uniItem,
-                majorItem: action.payload.majorItem
+                fav: state.fav.filter((item: TreeItem) => item.id !== action.payload.id)
+            };
+        case ADD_TO_ADDED:
+            if (state.added.some((item: TreeItem) => item.id === action.payload.id)) {
+                return state;
+            } else {
+                return {
+                    ...state,
+                    added: [...state.added, action.payload]
+                };
             }
-        case REMOVE_FROM_GOAL:
+        case REMOVE_FROM_ADDED:
             return {
                 ...state,
-                uniItem: action.payload.uniItem,
-                majorItem: action.payload.majorItem
-            }
+                added: state.added.filter((item: TreeItem) => item.id !== action.payload.id)
+            };
         default:
-            throw new Error(`Unhandled action type: ${action.type}`);
+            return state;
     }
 }
-
-export default goalReducer;
-
-
-// import { useReducer } from "react";
-// import { ADD_TO_GOAL, REMOVE_FROM_GOAL, addGoal, removeGoal } from "./action";
-// import goalReducer, { GoalState, initialState } from "./reducer";
-// import { Major, University } from "../data";
-
-// function RootProvider() {
-//     const [state, dispatch] = useReducer(goalReducer, initialState);
-
-//     const { goalItems } = state;
-
-//     const addGoalItem = (uniItem: University, majorItem: Major) => {
-//         dispatch(addGoal(uniItem, majorItem));
-//     }
-
-//     const removeGoalItem = (uniItem: University, majorItem: Major) => {
-//         dispatch(removeGoal(uniItem, majorItem));
-//     }
-
-    
-// }
-
-// export default RootProvider;

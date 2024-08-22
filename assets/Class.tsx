@@ -12,7 +12,7 @@ import { vw, vh, vmax, vmin } from './stylesheet';
 import { marginBottomForScrollView } from './component';
 
 // svg import
-import { compareIcon, compareIconActive, homeIcon, homeIconActive, searchIcon, settingIcon, settingIconActive, sharpLeftArrow, sharpRightArrow, userIcon, userIconActive } from './svgXml';
+import { searchIcon, sharpLeftArrow, sharpRightArrow, } from './svgXml';
 import clrStyle from './componentStyleSheet';
 
 // ____________________END OF IMPORT_______________________
@@ -65,72 +65,6 @@ export class SaveViewWithColorStatusBar extends Component<{ children?: React.Rea
                     {children}
                 </View>
             </SafeAreaView>
-        )
-    }
-}
-
-export class BottomBar extends Component<{ navFnc: any, currentScreen: string, bgColor?: string, shadow?: boolean }> {
-    render() {
-        const { navFnc, currentScreen, bgColor, shadow } = this.props;
-
-        // change style
-        interface CustomStyle {
-            font?: React.ComponentType<{ children: React.ReactNode, style?: any }>,
-            fontActive?: React.ComponentType<{ children: React.ReactNode, style?: any }>,
-            showText?: boolean,
-            textColor?: string,
-            textActiveColor?: string,
-        }
-
-        interface BottomBarItem {
-            title: string,
-            icon: any,
-            iconActive: any,
-            screen: string,
-        }
-
-        // change resource
-        const itemList: BottomBarItem[] = [
-            { title: 'Home', icon: homeIcon(vw(6), vw(6)), iconActive: homeIconActive(vw(6), vw(6)), screen: 'Home' },
-            { title: 'User', icon: userIcon(vw(6), vw(6)), iconActive: userIconActive(vw(6), vw(6)), screen: 'User' },
-            { title: 'Compare', icon: compareIcon(vw(6), vw(6)), iconActive: compareIconActive(vw(6), vw(6)), screen: 'Compare' },
-            { title: 'Settings', icon: settingIcon(vw(6), vw(6)), iconActive: settingIconActive(vw(6), vw(6)), screen: 'Settings' },
-        ]
-
-        const customStyle: CustomStyle = {
-            font: Nunito12Reg,
-            fontActive: Nunito12Bold,
-            showText: true,
-            textColor: clrStyle.grey2,
-            textActiveColor: clrStyle.main5,
-        }
-
-        return (
-            // custom style if u want to
-            <View style={[styles.w100vw, styles.flexRowEvenlyCenter, styles.alignContentCenter,
-            {
-                height: 'auto',
-                backgroundColor: bgColor ? bgColor : 'white',
-                shadowColor: shadow ? 'black' : 'transparent',
-                shadowOffset: { width: 0, height: -vw(2) },
-                shadowOpacity: 0.1,
-                shadowRadius: vw(1),
-                elevation: 10,
-            }]}>
-                {itemList.map((item, index) => {
-                    return (
-                        <TouchableOpacity key={index}
-                            onPress={() => { navFnc().navigate(item.screen) }}
-                            style={[styles.flexColCenter, styles.paddingV3vw, { width: (vw(80) / (itemList.length + 1)) }]}>
-                            {currentScreen === item.screen ? item.iconActive : item.icon}
-                            {customStyle.showText && customStyle.font ? currentScreen === item.screen && customStyle.fontActive ?
-                                <customStyle.fontActive style={{ color: customStyle.textActiveColor }}>{item.title}</customStyle.fontActive> :
-                                <customStyle.font style={{ color: customStyle.textColor }}>{item.title}</customStyle.font>
-                                : null}
-                        </TouchableOpacity>
-                    )
-                })}
-            </View>
         )
     }
 }

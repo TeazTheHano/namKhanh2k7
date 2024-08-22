@@ -18,8 +18,6 @@ import { Nunito14Reg, Nunito16Bold, Nunito18Bold, Roboto20Med, Signika20Bold } f
 
 // ____________________END OF IMPORT_______________________
 
-let { width, height } = Dimensions.get('window');
-
 
 export const marginBottomForScrollView = (time?: number) => {
     return (
