@@ -14,7 +14,7 @@ import Register from './screens/Register';
 import DataCollect from './screens/DataCollect';
 import BottomTab from './assets/BottomTab';
 import Home from './screens/Home';
-
+import User from './screens/User';
 // >>>>>>>>>>
 
 
@@ -32,6 +32,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name='Register' component={Register} />
           <Stack.Screen name="DataCollect" component={DataCollect} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="User" component={User} />
           {/* >>>> */}
         </Stack.Navigator>
       </NavigationContainer>

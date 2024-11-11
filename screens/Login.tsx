@@ -10,7 +10,10 @@ import { useNavigation } from '@react-navigation/native'
 import { shareIcon, sharpLeftArrow, sharpRightArrow } from '../assets/svgXml'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { currentSetUser, RootContext } from '../data/store'
-import { saveUser } from '../data/storageFunc'
+import { getUser, saveUser } from '../data/storageFunc'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '..'
+import { UserFormat } from '../data/interfaceFormat'
 
 export default function Login() {
     const navigation = useNavigation();
@@ -21,10 +24,61 @@ export default function Login() {
     const [password, setPassword] = React.useState<string>('')
     const [showGoBack, setShowGoBack] = React.useState(false)
 
+    const [userLocal, setUserLocal] = React.useState<UserFormat>();
+
     // tf this state is for the hidden password
     const [hidePassword, setHidePassword] = React.useState(true)
 
     const list = [email, password,]
+
+    async function getData() {
+        let userDoc = email.toString().split('@')[0];
+        try {
+            const docRef = doc(db, 'nutriUserData', `${userDoc}`);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                getUser().then((res) => {
+                    console.log(res, 42);
+
+                    if (res) {
+                        let newData: UserFormat = {
+                            ...res,
+                            ...docSnap.data()
+                        }
+                        saveUser(newData).then((res) => {
+                            if (res) {
+                                dispatch(currentSetUser(newData))
+                                navigation.navigate('BottomTab' as never);
+                            }
+                        })
+                    } else {
+                        let newData: UserFormat = {
+                            name: docSnap.data().displayName,
+                            email: email,
+                            synced: true,
+                            age: docSnap.data().age,
+                            dataCollect: docSnap.data().age ? true : false,
+                            data: docSnap.data().data,
+                            loginMethod: docSnap.data().loginMethod
+                        }
+                        saveUser(newData).then((res) => {
+                            if (res) {
+                                console.log(res, 67);
+
+                                dispatch(currentSetUser(newData))
+                                navigation.navigate('BottomTab' as never);
+                            }
+                        })
+                    }
+                })
+            } else {
+                console.log("91 No such document!");
+            }
+        } catch (error) {
+            console.error("94 Error getting document:", error);
+        }
+    }
 
     function currentStepAdjust(act: boolean) {
         if (act && list[currentStep] === '') {
@@ -39,9 +93,11 @@ export default function Login() {
             setCurrentStep(currentStep - 1);
         } else if (act && currentStep === list.length - 1) {
             let auth = getAuth();
-            LoginWithFirebaseHandle(email, password, undefined, signInWithEmailAndPassword, auth, dispatch, currentSetUser, saveUser).then((res) => {
-                console.log(res);
-                
+            LoginWithFirebaseHandle(email, password, null, signInWithEmailAndPassword, auth, dispatch, currentSetUser, saveUser).then((res) => {
+                console.log(res, 97);
+                if (res === true) {
+                    getData();
+                }
             })
         } else if (!act && currentStep === 0) {
             setShowGoBack(true);

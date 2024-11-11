@@ -1,17 +1,15 @@
 export interface UserFormat {
-    synced: boolean;
-    name?: string;
+    synced?: boolean;
+    name: string;
     age?: number;
     loginMethod?: string;
-    email?: string;
-    password?: string;
+    email: string;
     dataCollect?: boolean;
     data?: {
         interest: string[];
         favorite: string[];
         job?: string;
     }
-    createTime?: any;
 }
 
 export interface IndayNutriFormat {

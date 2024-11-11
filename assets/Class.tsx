@@ -738,11 +738,11 @@ export class BoardingPicking extends Component<{
                                     }
                                 };
                             }}
-                            style={[styles.wfit, styles.paddingV2vw, styles.paddingH4vw, styles.border1, { borderColor: selected.includes(item) ? clrStyle.main2 : clrStyle.grey2, borderRadius: vw(2), }]}>
+                            style={[styles.wfit, styles.paddingV2vw, styles.paddingH4vw, styles.border1, { borderColor: selected.includes(item) ? clrStyle.main2 : clrStyle.grey1, borderRadius: vw(2), }]}>
                             {selected.includes(item) ?
                                 <CTEXT.Nunito14ExBold style={[{ color: clrStyle.main2 }]}>{item}</CTEXT.Nunito14ExBold>
                                 :
-                                <CTEXT.Nunito14Reg style={[{ color: clrStyle.grey2 }]}>{item}</CTEXT.Nunito14Reg>
+                                <CTEXT.Nunito14Reg style={[{ color: clrStyle.grey1 }]}>{item}</CTEXT.Nunito14Reg>
                             }
                         </TouchableOpacity>
                     )

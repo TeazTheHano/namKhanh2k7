@@ -14,9 +14,6 @@ import { ItemFormat, NutriFormat, UserFormat } from "../interfaceFormat";
 
 export interface CurrentCache {
     user: UserFormat;
-    todayNutri: NutriFormat;
-    goalNutri?: NutriFormat;
-    currentItem: ItemFormat[];
 }
 
 export interface Action {
@@ -26,11 +23,16 @@ export interface Action {
 
 export const initialState: CurrentCache = {
     user: {
+        synced: false,
         name: '',
-        age: '',
-        imgAddress: '',
+        age: 0,
+        loginMethod: '',
         email: '',
-    },
-    todayNutri: {},
-    currentItem: []
+        dataCollect: false,
+        data: {
+            interest: [],
+            favorite: [],
+            job: '',
+        }
+    }
 };

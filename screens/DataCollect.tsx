@@ -118,11 +118,10 @@ export default function DataCollect({ route }: any) {
                         job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet'
                     }
                 }
-                setUserInfo({ ...userInfo, age: age, dataCollect: true, data: { interest: interest, favorite: favorite, job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet' } })
+                setUserInfo({ ...userInfo, age: age, dataCollect: true, synced: false, data: { interest: interest, favorite: favorite, job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet' } })
                 saveUser(userInfo).then((res) => {
                     console.log(res, 121);
                     dispatch(currentSetUser(userInfo))
-
 
                     writeDataToFirebase(data).then((res) => {
                         console.log(136, res);
@@ -130,6 +129,7 @@ export default function DataCollect({ route }: any) {
                             console.log('138 Data saved');
                             saveUser({ ...userInfo, synced: true }).then((res) => {
                                 if (res) {
+                                    console.log('141 Data saved');
                                     navigation.navigate('BottomTab' as never);
                                 }
                             })

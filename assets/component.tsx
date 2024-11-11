@@ -207,37 +207,41 @@ export async function LoginWithFirebaseHandle(
     dispatch: (action: any) => void,
     currentSetUser: (user: any) => any,
     saveUserToLocal: (user: any) => void
-) {
+): Promise<void | boolean> {
     email = email.trim();
     password = password.trim();
     if (email === '' || password === '') {
-        return Alert.alert('Vui lòng điền đủ thông tin');
+        Alert.alert('Vui lòng điền đủ thông tin');
+        return false;
     }
     try {
-        await signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential;
-                console.log(userCredential);
-                
-                if (user.user.email) {
-                    let userObj = {
-                        email: user.user.email,
-                        name: user.user.displayName ? user.user.displayName : user.user.email,
-                        password: password,
-                        imgAddress: user.user.photoURL ? user.user.photoURL : ''
-                    }
-                    saveUserToLocal(userObj)
-                    dispatch(currentSetUser(userObj));
-                } else {
-                    return Alert.alert('Email hoặc mật khẩu bạn nhập chưa đúng')
-                }
-            }).then(() => {
-                return navigation?.navigate('BottomTab') ?? true
-            })
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const { user } = userCredential;
+
+        if (user.email) {
+            const userObj: FORMATDATA.UserFormat = {
+                email: user.email,
+                name: user.displayName ?? user.email,
+            };
+
+            const userFormat = userObj as (FORMATDATA.UserFormat & { imgAddress?: string });
+            userFormat.imgAddress = user.photoURL ?? '';
+
+            saveUserToLocal(userObj);
+            dispatch(currentSetUser(userObj));
+
+            if (navigation) {
+                navigation.navigate('BottomTab');
+            }
+            return true;
+        } else {
+            Alert.alert('Email hoặc mật khẩu bạn nhập chưa đúng');
+            return false;
+        }
     } catch (error) {
-        console.log(error)
-        return Alert.alert('Email hoặc mật khẩu bạn nhập chưa đúng')
+        console.log(error);
+        Alert.alert('Email hoặc mật khẩu bạn nhập chưa đúng');
+        return false;
     }
 }
 
