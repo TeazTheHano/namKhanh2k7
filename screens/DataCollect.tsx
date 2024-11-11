@@ -14,7 +14,7 @@ import { Nunito14Reg, Nunito18Reg, Nunito20Bold, Nunito24Bold, Nunito24Reg } fro
 import { currentSetUser, RootContext } from '../data/store'
 import { getAuth, updateProfile } from 'firebase/auth'
 import { db } from '../index'
-import { collection, getDocs, doc, setDoc, getDoc } from 'firebase/firestore'
+import { collection, getDocs, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
 import { FirebaseError } from 'firebase/app'
 
 export default function DataCollect({ route }: any) {
@@ -29,21 +29,35 @@ export default function DataCollect({ route }: any) {
     const [Job, setJob] = React.useState<string>('')
     const [subTitleColor, setSubTitleColor] = React.useState(clrStyle.grey1)
 
-    const [userInfo, setUserInfo] = React.useState<UserFormat | undefined>(undefined)
-
-    const [firebaseDataCollectFormat, setFirebaseDataCollectFormat] = React.useState({
-        age: 0,
-        loginMethod: '',
-        synced: false,
-        data: {
-            interest: [],
-            favTree: [],
-            job: '',
-        }
-    })
+    const [userInfo, setUserInfo] = React.useState<UserFormat>(CurrentCache.user)
 
     const list = [age, interest, favorite, Job]
     const required = [age, interest, favorite]
+    let userDoc = CurrentCache.user.email?.toString().split('@')[0];
+
+    async function writeDataToFirebase(data: any): Promise<boolean> {
+        let docRef = doc(db, 'nutriUserData', `${userDoc}`);
+
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                // Update the existing document
+                console.log(56, data);
+
+                await setDoc(docRef, data, { merge: true });
+                console.log('Document updated successfully.');
+            } else {
+                // Create a new document
+                await setDoc(docRef, data);
+                console.log('Document created successfully.');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error writing document:', error);
+            return false;
+        }
+    }
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -54,21 +68,22 @@ export default function DataCollect({ route }: any) {
                 }
             }
 
-            let userFeild = CurrentCache.user.email?.toString().split('@')[0];
-
             async function getData() {
                 try {
-                    const docRef = doc(db, 'nutriUserData', `${userFeild}`);
+                    const docRef = doc(db, 'nutriUserData', `${userDoc}`);
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
-                        console.log("Document data:", docSnap.data());
-
+                        console.log("84 Document data:", docSnap.data());
+                        setAge(docSnap.data().age);
+                        setInterest(docSnap.data().data.interest);
+                        setFavorite(docSnap.data().data.favTree);
+                        setJob(docSnap.data().data.job);
                     } else {
-                        console.log("No such document!");
+                        console.log("91 No such document!");
                     }
                 } catch (error) {
-                    console.error("Error getting document:", error);
+                    console.error("94 Error getting document:", error);
                 }
             }
 
@@ -91,21 +106,35 @@ export default function DataCollect({ route }: any) {
             setCurrentStep(currentStep - 1);
         } else if (act && currentStep === list.length - 1) {
             console.log(62);
-            console.log(userInfo);
-
-            if (userInfo?.userID) {
-                console.log('63');
+            if (userInfo?.email) {
+                console.log('118');
+                let data = {
+                    age: age,
+                    loginMethod: 'email',
+                    synced: true,
+                    data: {
+                        interest: interest,
+                        favTree: favorite,
+                        job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet'
+                    }
+                }
                 setUserInfo({ ...userInfo, age: age, dataCollect: true, data: { interest: interest, favorite: favorite, job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet' } })
                 saveUser(userInfo).then((res) => {
-                    console.log(res);
+                    console.log(res, 121);
                     dispatch(currentSetUser(userInfo))
 
 
-
-                    if (res) {
-                        console.log('Data saved');
-                        navigation.navigate('BottomTab' as never);
-                    }
+                    writeDataToFirebase(data).then((res) => {
+                        console.log(136, res);
+                        if (res) {
+                            console.log('138 Data saved');
+                            saveUser({ ...userInfo, synced: true }).then((res) => {
+                                if (res) {
+                                    navigation.navigate('BottomTab' as never);
+                                }
+                            })
+                        }
+                    })
                 })
             }
 
@@ -120,9 +149,6 @@ export default function DataCollect({ route }: any) {
     // list of interest and favorite subject
     const interestList = ['Nghệ thuật', 'Âm nhạc', 'Thể thao', 'Khoa học', 'Công nghệ', 'Phim ảnh', 'Nấu ăn', 'Toán', 'Văn học', 'Khác'];
     const favoriteList = ['Cà chua', 'Hoa cúc', 'Cây trầu bà', 'Hoa hồng', 'Cây kim tiền', 'Hoa lan', 'Sen đá', 'Xương rồng', 'Cây lưỡi hổ', 'Khác'];
-    useEffect(() => {
-        console.log(interest);
-    }, [interest])
 
     function inputBox() {
         switch (currentStep) {

@@ -1,5 +1,4 @@
 export interface UserFormat {
-    userID: string;
     synced: boolean;
     name?: string;
     age?: number;
