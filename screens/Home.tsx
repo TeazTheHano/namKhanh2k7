@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking } from 'react-native'
+import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { getStorageItem, getUser, saveStorageItem } from '../data/storageFunc'
 import { BannerSliderWithCenter, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav } from '../assets/Class'
@@ -10,7 +10,7 @@ import { bellIcon, curveRightArrow, searchIcon } from '../assets/svgXml'
 import LinearGradient from 'react-native-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { marginBottomForScrollView } from '../assets/component'
-import { currentSetLocation, RootContext } from '../data/store'
+import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../data/store'
 import Geolocation from '@react-native-community/geolocation';
 import Config from "react-native-config";
 
@@ -35,13 +35,13 @@ export default function Home() {
   const maxRetries = 2;
 
   const error = (error: any) => {
-    console.log('Home.tsx - Getting Location Error', error);
+    console.log(Platform.OS, 'Home.tsx - Getting Location Error', error);
     if (retryCount < maxRetries) {
       retryCount++;
-      console.log('Re-Request Location, attempt:', retryCount);
+      console.log(Platform.OS, 'Re-Request Location, attempt:', retryCount);
       requestLocation();
     } else {
-      console.log('Max retries reached. Unable to get location. Setting default to Hanois coordinates.');
+      console.log(Platform.OS, 'Max retries reached. Unable to get location. Setting default to Hanois coordinates.');
       saveStorageItem('location', { lat: 21.0286, lng: 105.8431 });
       dispatch(currentSetLocation({ lat: 21.0286, lng: 105.8431 }));
     }
@@ -60,38 +60,43 @@ export default function Home() {
   };
 
   const fetchWeather = async () => {
-    console.log(Config.WEATHER_API);
-    console.log(64, CurrentCache.location);
+    console.log(CurrentCache.location);
 
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${Config.WEATHER_API}&q=${CurrentCache.location.lat},${CurrentCache.location.lng}&aqi=no`);
-      const weather = await response.json();
-      console.log(weather);
-    } catch (error) {
-      console.log('Home.tsx - Getting Weather Error', error);
-      if (error instanceof Error && error.message === 'No matching location found') {
+      const weatherResponse = await fetch(
+        `http://api.weatherapi.com/v1/current.json?key=${Config.WEATHER_API}&q=${CurrentCache.location.lat},${CurrentCache.location.lng}&aqi=no`
+      );
+      const weatherData = await weatherResponse.json();
+      dispatch(currentSetCurrentWeather(weatherData));
 
-        const geoCodingUrl = `https://api-bdc.net/data/reverse-geocode?latitude=${CurrentCache.location.lat}&longitude=${CurrentCache.location.lng}&localityLanguage=en&key=${Config.BIG_DATA_API}`;
-        const responseGeoCoding = await fetch(geoCodingUrl);
-        console.log(responseGeoCoding);
+      if (weatherData.error) {
+        console.error(Platform.OS, 'Error fetching weather data, try to get city location:', weatherData.error);
+        const storedLocation = await getStorageItem('location');
+        if (storedLocation) {
+          const { lat, lng } = storedLocation;
+          const geoCodingUrl = `https://api-bdc.net/data/reverse-geocode?latitude=${lat}&longitude=${lng}&localityLanguage=en&key=${Config.BIG_DATA_API}`;
+          const geoCodingResponse = await fetch(geoCodingUrl);
+          const geoCodingData = await geoCodingResponse.json();
+          const cityName = geoCodingData?.city;
 
-        // const geoCoding = await responseGeoCoding.json();
-        // const city = geoCoding.Response.View[0].Result[0].Location.Address.City;
-        // const cityLat = geoCoding.Response.View[0].Result[0].Location.DisplayPosition.Latitude;
-        // const cityLng = geoCoding.Response.View[0].Result[0].Location.DisplayPosition.Longitude;
-        // console.log(city);
+          const weatherUrl = `https://api.weatherapi.com/v1/current.json?key=${Config.WEATHER_API}&q=${cityName}&aqi=no`;
+          const cityWeatherResponse = await fetch(weatherUrl);
+          const cityWeatherData = await cityWeatherResponse.json();
 
-        // saveStorageItem('location', { lat: cityLat, lng: cityLng });
-        // dispatch(currentSetLocation({ lat: cityLat, lng: cityLng }));
-        // fetchWeather();
+          dispatch(currentSetLocation({ lat: cityWeatherData.location.lat, lng: cityWeatherData.location.lon }));
+          saveStorageItem('location', { lat: cityWeatherData.location.lat, lng: cityWeatherData.location.lon });
+          dispatch(currentSetCurrentWeather(cityWeatherData));
+        }
       }
+    } catch (error) {
+      console.error(Platform.OS, 'Error fetching weather data, retrying:', error);
+      setTimeout(fetchWeather, 5000);
     }
-  }
+  };
 
   useEffect(() => {
     const unsub = navigation.addListener('focus', () => {
       getStorageItem('location').then((res) => {
-        console.log(95, res, new Date().getTime());
         if (res) {
           dispatch(currentSetLocation(res));
         } else {
@@ -103,7 +108,9 @@ export default function Home() {
   }, [navigation])
 
   useEffect(() => {
-    fetchWeather();
+    if (CurrentCache.location.lat && CurrentCache.location.lng) {
+      fetchWeather();
+    }
   }, [CurrentCache.location])
 
 

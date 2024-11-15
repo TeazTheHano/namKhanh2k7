@@ -23,7 +23,7 @@ import Config from "react-native-config";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: Config.ENV_FIREBASE_API_KEY,
+    apiKey: Config.FIREBASE_API_KEY,
     // TODO: use evn variable for this api
     authDomain: "ss2024-5303e.firebaseapp.com",
     projectId: "ss2024-5303e",
