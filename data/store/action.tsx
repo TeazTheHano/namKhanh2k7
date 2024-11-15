@@ -1,6 +1,6 @@
 //FIXME: NEED CHANGE IN NEW PJ: Add action types and action creators here
 
-import { ItemFormat, NutriFormat, UserFormat } from "../interfaceFormat";
+import { StorageItem, UserFormat } from "../interfaceFormat";
 
 // export const EXAMPLE = `EXAMPLE`;
 // export const examplefnc = (item: any) => {
@@ -18,34 +18,18 @@ export const currentSetUser = (user: UserFormat) => {
     }
 }
 
-export const SET_TODAY_NUTRI = `SET_TODAY_NUTRI`;
-export const currentSetTodayNutri = (nutri: NutriFormat) => {
+export const SET_LOCATION = `SET_LOCATION`;
+export const currentSetLocation = (location: StorageItem['location']) => {
     return {
-        type: SET_TODAY_NUTRI,
-        payload: nutri
+        type: SET_LOCATION,
+        payload: location
     }
 }
 
-export const SET_GOAL_NUTRI = `SET_GOAL_NUTRI`;
-export const currentSetGoalNutri = (nutri: NutriFormat) => {
+export const SET_CURRETN_WEATHER = `SET_CURRETN_WEATHER`;
+export const currentSetCurrentWeather = (currentWeather: any) => {
     return {
-        type: SET_GOAL_NUTRI,
-        payload: nutri
-    }
-}
-
-export const SET_CURRENT_ITEM = `SET_CURRENT_ITEM`;
-export const currentSetItem = (item: ItemFormat) => {
-    return {
-        type: SET_CURRENT_ITEM,
-        payload: item
-    }
-}
-
-export const REMOVE_CURRENT_ITEM = `REMOVE_CURRENT_ITEM`;
-export const currentRemoveItem = (item: ItemFormat) => {
-    return {
-        type: REMOVE_CURRENT_ITEM,
-        payload: item
+        type: SET_CURRETN_WEATHER,
+        payload: currentWeather
     }
 }

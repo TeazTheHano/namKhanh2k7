@@ -765,7 +765,7 @@ export class TopNav extends Component<{
         const { children, title, returnPreScreen, returnPreScreenFnc, rightIcon, rightFnc, hideChildren } = this.props;
         return (
             <>
-                <Animated.View style={[styles.paddingH4vw, styles.paddingBottom4vw, styles.paddingTop2vw, styles.overflowHidden, { zIndex: 1, backgroundColor: clrStyle.main2, borderBottomLeftRadius: vw(6), borderBottomRightRadius: vw(6), }]}>
+                <Animated.View style={[styles.paddingH4vw, styles.paddingBottom4vw, styles.paddingTop2vw, styles.overflowHidden, { zIndex: 1, borderBottomLeftRadius: vw(6), borderBottomRightRadius: vw(6), }]}>
                     <View style={[styles.paddingTop2vw, styles.w100, styles.flexRowBetweenCenter]}>
                         {returnPreScreen ?
                             <TouchableOpacity
@@ -775,7 +775,7 @@ export class TopNav extends Component<{
                             </TouchableOpacity>
                             : <View style={[{ width: vw(10), height: vw(10), }]} />
                         }
-                        {title ? <CTEXT.Nunito20Bold style={[styles.textCenter, styles.alignSelfCenter, { color: 'white' }]}>{title}</CTEXT.Nunito20Bold> : null}
+                        {title ? <CTEXT.Nunito20Bold style={[styles.textCenter, styles.alignSelfCenter, { color: clrStyle.main2 }]}>{title}</CTEXT.Nunito20Bold> : null}
                         {rightIcon ?
                             <TouchableOpacity
                                 style={[styles.padding2vw]}

@@ -34,7 +34,7 @@ export default function Login() {
     async function getData() {
         let userDoc = email.toString().split('@')[0];
         try {
-            const docRef = doc(db, 'nutriUserData', `${userDoc}`);
+            const docRef = doc(db, 'agriUserData', `${userDoc}`);
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
@@ -44,6 +44,8 @@ export default function Login() {
                     if (res) {
                         let newData: UserFormat = {
                             ...res,
+                            synced: true,
+                            dataCollect: docSnap.data().age ? true : false,
                             ...docSnap.data()
                         }
                         saveUser(newData).then((res) => {
@@ -73,7 +75,8 @@ export default function Login() {
                     }
                 })
             } else {
-                console.log("91 No such document!");
+                console.log("91 No such document! Navigate to DataCollect");
+                navigation.navigate('DataCollect' as never);
             }
         } catch (error) {
             console.error("94 Error getting document:", error);

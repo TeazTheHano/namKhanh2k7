@@ -17,6 +17,7 @@ export default function LoginOpt() {
         const unsubscribe = navigation.addListener('focus', () => {
             getUser().then((res) => {
                 if (res && res.name) {
+                    console.log(20, Platform.OS,res);
                     dispatch(currentSetUser(res));
                     if (res.synced) {
                         if (res.dataCollect) {
@@ -25,6 +26,8 @@ export default function LoginOpt() {
                             navigation.navigate('DataCollect' as never);
                         }
                     } else {
+                        console.log(27, Platform.OS);
+                        
                         navigation.navigate('DataCollect' as never);
                     }
                 }

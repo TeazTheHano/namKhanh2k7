@@ -36,7 +36,7 @@ export default function DataCollect({ route }: any) {
     let userDoc = CurrentCache.user.email?.toString().split('@')[0];
 
     async function writeDataToFirebase(data: any): Promise<boolean> {
-        let docRef = doc(db, 'nutriUserData', `${userDoc}`);
+        let docRef = doc(db, 'agriUserData', `${userDoc}`);
 
         try {
             const docSnap = await getDoc(docRef);
@@ -70,7 +70,7 @@ export default function DataCollect({ route }: any) {
 
             async function getData() {
                 try {
-                    const docRef = doc(db, 'nutriUserData', `${userDoc}`);
+                    const docRef = doc(db, 'agriUserData', `${userDoc}`);
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
@@ -105,13 +105,12 @@ export default function DataCollect({ route }: any) {
         } else if (!act && currentStep > 0) {
             setCurrentStep(currentStep - 1);
         } else if (act && currentStep === list.length - 1) {
-            console.log(62);
             if (userInfo?.email) {
-                console.log('118');
                 let data = {
                     age: age,
                     loginMethod: 'email',
                     synced: true,
+                    dataCollect: true,
                     data: {
                         interest: interest,
                         favTree: favorite,
@@ -127,8 +126,11 @@ export default function DataCollect({ route }: any) {
                         console.log(136, res);
                         if (res) {
                             console.log('138 Data saved');
-                            saveUser({ ...userInfo, synced: true }).then((res) => {
+                            saveUser({ ...userInfo, synced: true, dataCollect: true }).then((res) => {
                                 if (res) {
+                                    getUser().then((res) => {
+                                        console.log(res, 142);
+                                    })
                                     console.log('141 Data saved');
                                     navigation.navigate('BottomTab' as never);
                                 }

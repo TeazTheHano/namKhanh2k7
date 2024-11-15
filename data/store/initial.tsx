@@ -10,15 +10,17 @@
 //     example: 'example'
 // };
 
-import { ItemFormat, NutriFormat, UserFormat } from "../interfaceFormat";
+import { StorageItem, UserFormat } from "../interfaceFormat";
 
 export interface CurrentCache {
     user: UserFormat;
+    location: StorageItem['location'];
+    currentWeather: any
 }
 
 export interface Action {
     type: string;
-    payload?: UserFormat | NutriFormat;
+    payload?: any;
 }
 
 export const initialState: CurrentCache = {
@@ -34,5 +36,10 @@ export const initialState: CurrentCache = {
             favorite: [],
             job: '',
         }
-    }
+    },
+    location: {
+        lat: 0,
+        lng: 0
+    },
+    currentWeather: {}
 };
