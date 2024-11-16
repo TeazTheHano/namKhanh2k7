@@ -1,8 +1,8 @@
 import { Component } from "react";
-import { Text } from "react-native";
+import { Text, TextStyle } from "react-native";
 import { vw } from "./stylesheet";
 
-export class Nunito12Med extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito12Med extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -14,7 +14,7 @@ export class Nunito12Med extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito14Med extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito14Med extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -26,7 +26,7 @@ export class Nunito14Med extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito16Med extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito16Med extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -38,7 +38,7 @@ export class Nunito16Med extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito18Med extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito18Med extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -50,7 +50,7 @@ export class Nunito18Med extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito10Reg extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito10Reg extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -62,7 +62,7 @@ export class Nunito10Reg extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito12Reg extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito12Reg extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -74,7 +74,7 @@ export class Nunito12Reg extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito14Reg extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito14Reg extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -86,7 +86,7 @@ export class Nunito14Reg extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito16Reg extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito16Reg extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -98,7 +98,7 @@ export class Nunito16Reg extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito24Reg extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito24Reg extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -110,7 +110,7 @@ export class Nunito24Reg extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito18Reg extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito18Reg extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -122,7 +122,7 @@ export class Nunito18Reg extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Nunito12Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito12Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -134,7 +134,7 @@ export class Nunito12Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito14Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito14Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -146,7 +146,7 @@ export class Nunito14Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito16Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito16Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -158,7 +158,7 @@ export class Nunito16Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito18Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito18Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -170,7 +170,7 @@ export class Nunito18Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito20Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito20Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -182,7 +182,7 @@ export class Nunito20Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito22Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito22Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -194,7 +194,7 @@ export class Nunito22Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito24Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito24Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -206,7 +206,7 @@ export class Nunito24Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Nunito14ExBold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Nunito14ExBold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -218,7 +218,7 @@ export class Nunito14ExBold extends Component<{ children: React.ReactNode, style
     }
 }
 
-export class Signika20Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika20Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -230,7 +230,7 @@ export class Signika20Bold extends Component<{ children: React.ReactNode, style?
     }
 }
 
-export class Signika22Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika22Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -242,7 +242,7 @@ export class Signika22Bold extends Component<{ children: React.ReactNode, style?
     }
 }
 
-export class Signika24Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika24Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -254,7 +254,7 @@ export class Signika24Bold extends Component<{ children: React.ReactNode, style?
     }
 }
 
-export class Signika28Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika28Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -266,7 +266,7 @@ export class Signika28Bold extends Component<{ children: React.ReactNode, style?
     }
 }
 
-export class SonsieOne100 extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class SonsieOne100 extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -278,7 +278,7 @@ export class SonsieOne100 extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Signika20SemiBold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika20SemiBold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -290,7 +290,7 @@ export class Signika20SemiBold extends Component<{ children: React.ReactNode, st
     }
 }
 
-export class Signika22SemiBold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika22SemiBold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -302,7 +302,7 @@ export class Signika22SemiBold extends Component<{ children: React.ReactNode, st
     }
 }
 
-export class Signika24SemiBold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Signika24SemiBold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -314,7 +314,7 @@ export class Signika24SemiBold extends Component<{ children: React.ReactNode, st
     }
 }
 
-export class Roboto20Med extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Roboto20Med extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -326,7 +326,7 @@ export class Roboto20Med extends Component<{ children: React.ReactNode, style?: 
     }
 }
 
-export class Roboto16Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Roboto16Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -338,7 +338,7 @@ export class Roboto16Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class Roboto20Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Roboto20Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -350,7 +350,7 @@ export class Roboto20Bold extends Component<{ children: React.ReactNode, style?:
     }
 }
 
-export class SFproDisplay20Med extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class SFproDisplay20Med extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 
@@ -362,7 +362,7 @@ export class SFproDisplay20Med extends Component<{ children: React.ReactNode, st
     }
 }
 
-export class Helvetica19Bold extends Component<{ children: React.ReactNode, style?: any, lineNumber?: number, color?: string }> {
+export class Helvetica19Bold extends Component<{ children: React.ReactNode, style?: TextStyle | any, lineNumber?: number, color?: string }> {
     render() {
         const { color, children, style, lineNumber } = this.props;
 

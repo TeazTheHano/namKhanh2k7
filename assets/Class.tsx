@@ -775,7 +775,7 @@ export class TopNav extends Component<{
                             </TouchableOpacity>
                             : <View style={[{ width: vw(10), height: vw(10), }]} />
                         }
-                        {title ? <CTEXT.Nunito20Bold style={[styles.textCenter, styles.alignSelfCenter, { color: clrStyle.main2 }]}>{title}</CTEXT.Nunito20Bold> : null}
+                        {title ? <CTEXT.Nunito22Bold style={[styles.textCenter, styles.alignSelfCenter, { color: clrStyle.main2 }]}>{title}</CTEXT.Nunito22Bold> : null}
                         {rightIcon ?
                             <TouchableOpacity
                                 style={[styles.padding2vw]}
