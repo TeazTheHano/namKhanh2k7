@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { getStorageItem, getUser, saveStorageItem } from '../data/storageFunc'
 import { BannerSliderWithCenter, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRowBetweenCenter, ViewRowCenter } from '../assets/Class'
@@ -22,10 +22,11 @@ export default function Home() {
   const [CurrentCache, dispatch] = React.useContext(RootContext);
   const [weatherIconSrc, setWeatherIconSrc] = useState();
   const [dayOrNight, setDayOrNight] = useState('d');
+  const [errMessage, setErrMessage] = useState('');
+  const [isShowMore, setIsShowMore] = useState(false);
 
   async function requestLocation() {
-    Geolocation.requestAuthorization();
-    Geolocation.getCurrentPosition(success, error, options);
+    Geolocation.requestAuthorization(() => { Geolocation.getCurrentPosition(success, error, options) });
   }
 
   const success = (position: any) => {
@@ -102,7 +103,14 @@ export default function Home() {
         console.log(Platform.OS, 'Re-Request Weather, attempt:', retryCountWeather);
         setTimeout(fetchWeather, 5000);
       } else {
-        console.log(Platform.OS, 'Max retries reached. Unable to fetch weather.');
+        console.log(Platform.OS, 'Max retries reached. Unable to fetch weather. GETTING DEFAULT DATA');
+        setErrMessage('Không thể lấy dữ liệu thời tiết. Đang sử dụng dữ liệu mô phỏng');
+        let defaultWeatherData = { "location": { "name": "Hanoi", "region": "", "country": "Vietnam", "lat": 21.0333, "lon": 105.85, "tz_id": "Asia/Bangkok", "localtime_epoch": 1731745975, "localtime": "2024-11-16 15:32" }, "current": { "last_updated_epoch": 1731745800, "last_updated": "2024-11-16 15:30", "temp_c": 31.0, "temp_f": 87.8, "is_day": 1, "condition": { "text": "Nhiều nắng", "icon": "//cdn.weatherapi.com/weather/64x64/day/113.png", "code": 1000 }, "wind_mph": 2.9, "wind_kph": 4.7, "wind_degree": 234, "wind_dir": "SW", "pressure_mb": 1009.0, "pressure_in": 29.8, "precip_mm": 0.01, "precip_in": 0.0, "humidity": 55, "cloud": 0, "feelslike_c": 34.4, "feelslike_f": 93.8, "windchill_c": 30.7, "windchill_f": 87.3, "heatindex_c": 33.8, "heatindex_f": 92.8, "dewpoint_c": 21.1, "dewpoint_f": 69.9, "vis_km": 10.0, "vis_miles": 6.0, "uv": 1.4, "gust_mph": 3.4, "gust_kph": 5.5 } }
+        setWeatherIconSrc(iconRequireList[`${dayOrNight}${defaultWeatherData.current.condition.code}`]);
+        dispatch(currentSetCurrentWeather(defaultWeatherData));
+        setTimeout(() => {
+          setErrMessage('');
+        }, 2000);
       }
     }
   };
@@ -127,8 +135,9 @@ export default function Home() {
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1} >
       <TopNav title='Trang chủ' rightIcon={SVG.bellIcon(vw(6), vw(6))} />
-      <ScrollView style={[styles.flex1, styles.paddingH6vw, {}]}>
+      <ScrollView style={[styles.flex1, styles.paddingH6vw, {}]} contentContainerStyle={[styles.gap6vw]}>
         <ViewCol style={[styles.gap2vw, styles.bgcolorWhite, styles.paddingH5vw, styles.paddingV4vw, styles.borderRadius20, styles.overflowHidden]}>
+          {errMessage ? <Nunito14Reg color='#FF0000' style={[styles.textCenter]}>{errMessage}</Nunito14Reg> : null}
           <ViewRowBetweenCenter style={[styles.flex1]}>
             {/*  */}
             <ViewCol style={[styles.gap1vw]}>
@@ -148,9 +157,43 @@ export default function Home() {
               </ViewRowCenter>
             </ViewColBetweenCenter>
           </ViewRowBetweenCenter>
+
+          {isShowMore ?
+            <ViewCol style={[styles.gap1vw]}>
+              <Nunito14Bold color={clrStyle.grey1}>Tốc độ gió: {CurrentCache.currentWeather?.current?.wind_kph || 0}km/h</Nunito14Bold>
+              <Nunito14Bold color={clrStyle.grey1}>Hướng gió: {CurrentCache.currentWeather?.current?.wind_dir || ''}</Nunito14Bold>
+              <Nunito14Bold color={clrStyle.grey1}>Gió giật: {CurrentCache.currentWeather?.current?.gust_kph || ''}</Nunito14Bold>
+              <Nunito14Bold color={clrStyle.grey1}>Tia cực tím: {CurrentCache.currentWeather?.current?.uv || ''}</Nunito14Bold>
+              <Nunito14Bold color={clrStyle.grey1}>Áp suất khí quyển: {CurrentCache.currentWeather?.current?.pressure_mb || ''}mb</Nunito14Bold>
+            </ViewCol>
+            : null}
+
+          <TouchableOpacity style={[styles.paddingH3vw, styles.paddingV1vw, styles.alignSelfCenter]}
+            onPress={() => { setIsShowMore(!isShowMore) }}>
+            <Nunito12Reg color={clrStyle.grey1}>{!isShowMore ? 'Hiển thị thêm' : 'Ẩn bớt'}</Nunito12Reg>
+          </TouchableOpacity>
         </ViewCol>
 
+        <ViewRowBetweenCenter style={[styles.borderRadius3vw, styles.padding4vw, styles.paddingV2vw, styles.shadowW0H075Black, { backgroundColor: clrStyle.main1, }]}>
+          <Nunito16Bold>Cây trồng của bạn</Nunito16Bold>
+          <TouchableOpacity onPress={() => { navigation.navigate('ListView', { cate: 'myTree' }) }}
+            style={[styles.padding2vw, styles.paddingH3vw, styles.borderRadius2vw, styles.bgcolorWhite]}>
+            <Nunito12Bold color={clrStyle.main3}>Xem thêm</Nunito12Bold>
+          </TouchableOpacity>
+        </ViewRowBetweenCenter>
+        {/* list */}
+
+        <ViewRowBetweenCenter style={[styles.borderRadius3vw, styles.padding4vw, styles.paddingV2vw, styles.shadowW0H075Black, { backgroundColor: clrStyle.main1, }]}>
+          <Nunito16Bold>Cây trồng của bạn</Nunito16Bold>
+          <TouchableOpacity onPress={() => { navigation.navigate('ListView', { cate: 'treeLib' }) }}
+            style={[styles.padding2vw, styles.paddingH3vw, styles.borderRadius2vw, styles.bgcolorWhite]}>
+            <Nunito12Bold color={clrStyle.main3}>Xem thêm</Nunito12Bold>
+          </TouchableOpacity>
+        </ViewRowBetweenCenter>
+        {/* list */}
+
+        <Nunito20Bold color={clrStyle.main2} style={[styles.textCenter]}>Tin tức Nông nghiệp</Nunito20Bold>
       </ScrollView>
-    </SSBarWithSaveArea>
+    </SSBarWithSaveArea >
   )
 }

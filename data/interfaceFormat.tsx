@@ -19,3 +19,13 @@ export interface UserFormat {
         job?: string;
     }
 }
+
+export interface TreeData {
+    name: string;
+    grownTime: string;
+    careRate: string;
+    careFreq: string;
+    description: string | any[];
+    careDetail: string | any[];
+    schedule: string | any[];
+}

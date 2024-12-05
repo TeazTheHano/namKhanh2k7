@@ -15,6 +15,9 @@ import DataCollect from './screens/DataCollect';
 import BottomTab from './assets/BottomTab';
 import Home from './screens/Home';
 import User from './screens/User';
+import Shop from './screens/Shop';
+import Community from './screens/Community';
+import ListView from './screens/ListView';
 // >>>>>>>>>>
 
 
@@ -33,7 +36,11 @@ function App(): React.JSX.Element {
           <Stack.Screen name="DataCollect" component={DataCollect} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="User" component={User} />
+          <Stack.Screen name="Shop" component={Shop} />
+          <Stack.Screen name="Community" component={Community} />
+
           {/* >>>> */}
+          <Stack.Screen name="ListView" component={ListView} />
         </Stack.Navigator>
       </NavigationContainer>
     </ProviderTotal>
