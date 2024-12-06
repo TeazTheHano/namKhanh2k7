@@ -21,6 +21,7 @@ export interface UserFormat {
 }
 
 export interface TreeData {
+    img: any;
     name: string;
     grownTime: string;
     careRate: string;
@@ -28,4 +29,13 @@ export interface TreeData {
     description: string | any[];
     careDetail: string | any[];
     schedule: string | any[];
+}
+
+export interface ProductInfo {
+    name: string,
+    img: any[],
+    buyCount: number,
+    price: number,
+    rate: number,
+    info: any[],
 }
