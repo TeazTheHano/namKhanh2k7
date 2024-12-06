@@ -66,7 +66,7 @@ export const onShare = async () => {
     }
 };
 
-export const ListGen = (customStyle: any, data: string | Array<string | string[]>, FontClass1st: ComponentType<any>, useColor: string = clrStyle.white as string, bullet1st: string = '1', FontClass2nd: ComponentType<any> = FontClass1st, bullet2nd: string = '-', textIndent2nd: any = 0) => {
+export const ListGen = (customStyle: any, data: string | Array<string | string[]>, FontClass1st: ComponentType<any>, useColor: string = clrStyle.white as string, bullet1st: string = '1', FontClass2nd: ComponentType<any> = FontClass1st, useColor2nd: string = useColor, bullet2nd: string = '-', textIndent2nd: any = 0) => {
     function bulletMark(bullet: string, index: number) {
         let i = index == 0 ? 0 : index % 2 == 0 ? index / 2 : index
         if (bullet === 'a') {
@@ -150,8 +150,8 @@ export const ListGen = (customStyle: any, data: string | Array<string | string[]
                                 {item.map((subItem, subIndex) => {
                                     return (
                                         <View key={subIndex} style={[styles.flexRow]}>
-                                            <FontClass2nd style={{ color: useColor }}>{bulletMark(bullet2nd, subIndex)} </FontClass2nd>
-                                            <FontClass2nd style={{ color: useColor, ...customStyle }}>{subItem}</FontClass2nd>
+                                            <FontClass2nd style={{ color: useColor2nd }}>{bulletMark(bullet2nd, subIndex)} </FontClass2nd>
+                                            <FontClass2nd style={{ color: useColor2nd, ...customStyle }}>{subItem}</FontClass2nd>
                                         </View>
                                     )
                                 })}

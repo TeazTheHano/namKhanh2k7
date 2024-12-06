@@ -19,7 +19,7 @@ import Shop from './screens/Shop';
 import Community from './screens/Community';
 import ListView from './screens/ListView';
 // >>>>>>>>>>
-
+import TreeDetail from './screens/TreeDetail';
 
 // ____________________END OF IMPORT_______________________
 
@@ -41,6 +41,7 @@ function App(): React.JSX.Element {
 
           {/* >>>> */}
           <Stack.Screen name="ListView" component={ListView} />
+          <Stack.Screen name="TreeDetail" component={TreeDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </ProviderTotal>

@@ -255,6 +255,10 @@ const styles = StyleSheet.create({
         height: vh(25),
     },
 
+    h25vw: {
+        height: vw(25),
+    },
+
     h20: {
         height: '20%',
     },

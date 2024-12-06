@@ -157,7 +157,7 @@ export const treeData: FormatData.TreeData[] = [
         name: `Xương rồng`,
         careRate: `Trung bình`,
         grownTime: `3-4 tháng`,
-        careFreq: `5 đến 10 ngày`,
+        careFreq: `5 - 10 ngày`,
         description: [
             `Mô tả về cây`,
             `Cấu Trúc: Cây có thân dạng xương rồng với các cành phát triển theo hình dáng một đám mây xanh.Thân và các cành thường chứa gai hoặc lông.`,
@@ -236,7 +236,7 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree3.png'),
-        name: ``,
+        name: `Cây cá vàng`,
         careRate: `Trung bình`,
         grownTime: ``,
         careFreq: `2-3 ngày`,
@@ -374,7 +374,7 @@ export const treeData: FormatData.TreeData[] = [
         ],
     },
     {
-        img: require('../assets/photos/tree/tree5.png'),
+        img: require('../assets/photos/tree/tree6.png'),
         name: `Cây bưởi`,
         careRate: `Trung bình`,
         grownTime: `5 năm`,
@@ -435,10 +435,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree7.png'),
-        name: `	Cây mận	`,
-        careRate: `	Trung bình	`,
-        grownTime: `	3-6 năm	`,
-        careFreq: `	5-10 ngày	`,
+        name: `Cây mận	`,
+        careRate: `Trung bình	`,
+        grownTime: `3-6 năm	`,
+        careFreq: `5-10 ngày	`,
         description: [
             `MÔ TẢ VỀ CÂY`,
 
@@ -504,10 +504,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree8.png'),
-        name: `	Cây cỏ gương`,
-        careRate: `	Dễ`,
-        grownTime: `	~4 Tháng`,
-        careFreq: `	7 ngày`,
+        name: `Cây cỏ gương`,
+        careRate: `Dễ`,
+        grownTime: `~4 Tháng`,
+        careFreq: `7 ngày`,
         description: [
             `Mô tả về cây `,
 
@@ -561,10 +561,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree9.png'),
-        name: `	CÂY BÀNG SING`,
-        careRate: `	Dễ`,
-        grownTime: `	5 - 7 năm`,
-        careFreq: `	7 - 10 ngày`,
+        name: `CÂY BÀNG SING`,
+        careRate: `Dễ`,
+        grownTime: `5 - 7 năm`,
+        careFreq: `7 - 10 ngày`,
         description: [
             `Mô tả về cây `,
 
@@ -618,10 +618,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree10.png'),
-        name: `	 CÂY NHA ĐAM`,
-        careRate: `	Dễ`,
-        grownTime: `	1 năm`,
-        careFreq: `	3 - 5 ngày`,
+        name: ` CÂY NHA ĐAM`,
+        careRate: `Dễ`,
+        grownTime: `1 năm`,
+        careFreq: `3 - 5 ngày`,
         description: [
             `ĐẶC ĐIỂM:`,
             [
@@ -675,10 +675,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree11.png'),
-        name: `	CÂY LAN CHI`,
-        careRate: `	Dễ`,
-        grownTime: `		`,
-        careFreq: `	5 - 7 ngày`,
+        name: `CÂY LAN CHI`,
+        careRate: `Dễ`,
+        grownTime: `	`,
+        careFreq: `5 - 7 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY`,
             [
@@ -726,10 +726,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree12.png'),
-        name: `	CÂY LƯỠI HỔ`,
-        careRate: `	Dễ`,
-        grownTime: `	~4 Tháng`,
-        careFreq: `	7 - 10 ngày`,
+        name: `CÂY LƯỠI HỔ`,
+        careRate: `Dễ`,
+        grownTime: `~4 Tháng`,
+        careFreq: `7 - 10 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY`,
             [
@@ -772,10 +772,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree13.png'),
-        name: `	CÂY ĐUÔI CÔNG`,
-        careRate: `	Dễ`,
-        grownTime: `	1 - 2 năm`,
-        careFreq: `	3 - 7 ngày`,
+        name: `CÂY ĐUÔI CÔNG`,
+        careRate: `Dễ`,
+        grownTime: `1 - 2 năm`,
+        careFreq: `3 - 7 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY:`,
             [
@@ -821,10 +821,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree14.png'),
-        name: `	CÂY TRẦU BÀ XẺ LÁ`,
-        careRate: `	Trung bình`,
-        grownTime: `	~3 năm`,
-        careFreq: `	2 - 3 ngày`,
+        name: `CÂY TRẦU BÀ XẺ LÁ`,
+        careRate: `Trung bình`,
+        grownTime: `~3 năm`,
+        careFreq: `2 - 3 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY:`,
             [
@@ -882,10 +882,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree15.png'),
-        name: `	Cây hoa Trà`,
-        careRate: `	Khó`,
-        grownTime: `	2 - 3 năm`,
-        careFreq: `	mỗi ngày`,
+        name: `Cây hoa Trà`,
+        careRate: `Khó`,
+        grownTime: `2 - 3 năm`,
+        careFreq: `mỗi ngày`,
         description: [
             `MÔ TẢ VỀ CÂY`,
             [
@@ -936,10 +936,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree16.png'),
-        name: `	Cây lan quân tử`,
-        careRate: `	Khó`,
-        grownTime: `	6 năm`,
-        careFreq: `	4 - 5 ngày`,
+        name: `Cây lan quân tử`,
+        careRate: `Khó`,
+        grownTime: `6 năm`,
+        careFreq: `4 - 5 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY`,
             [
@@ -983,10 +983,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree17.png'),
-        name: `	Cây cảnh Kim Ngân`,
-        careRate: `	Khó`,
-        grownTime: `	4 - 5 năm`,
-        careFreq: `	7 - 14 ngày`,
+        name: `Cây cảnh Kim Ngân`,
+        careRate: `Khó`,
+        grownTime: `4 - 5 năm`,
+        careFreq: `7 - 14 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY:`,
             [
@@ -1039,10 +1039,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree18.png'),
-        name: `	Hoa hồng`,
-        careRate: `	Khó`,
-        grownTime: `	3 tháng`,
-        careFreq: `	3 - 4 ngày`,
+        name: `Hoa hồng`,
+        careRate: `Khó`,
+        grownTime: `3 tháng`,
+        careFreq: `3 - 4 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY:`,
             [
@@ -1087,10 +1087,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree19.png'),
-        name: `	Cây Thu Hải Đường`,
-        careRate: `	Khó`,
-        grownTime: `	6 tháng - 2 năm`,
-        careFreq: `	5 - 6 ngày`,
+        name: `Cây Thu Hải Đường`,
+        careRate: `Khó`,
+        grownTime: `6 tháng - 2 năm`,
+        careFreq: `5 - 6 ngày`,
         description: [
             `MÔ TẢ VỀ CÂY:`,
             [
@@ -1139,11 +1139,10 @@ export const treeData: FormatData.TreeData[] = [
     },
     {
         img: require('../assets/photos/tree/tree20.png'),
-        name: `	Cây Gasteria
-                (Sen đá lưỡi bò)`,
-        careRate: `	Dễ`,
-        grownTime: `	3 - 4 tháng`,
-        careFreq: `	5 - 10 ngày`,
+        name: `Cây Gasteria (Sen đá lưỡi bò)`,
+        careRate: `Dễ`,
+        grownTime: `3 - 4 tháng`,
+        careFreq: `5 - 10 ngày`,
         description: [
             `Mô tả về cây`,
             [
@@ -1190,7 +1189,7 @@ export const products: FormatData.ProductInfo[] = [
         img: [
             require('../assets/photos/product/pro1-1.png'),
         ],
-        name: `	1KG Phân bón NPK Đầu Trâu 20 - 20 - 15 + TE cho tất cả loại cây trồng	`,
+        name: `1KG Phân bón NPK Đầu Trâu 20 - 20 - 15 + TE cho tất cả loại cây trồng	`,
         buyCount: 1223,
         rate: 4.6,
         price: 155000,
@@ -1220,7 +1219,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro2-2.png'),
             require('../assets/photos/product/pro2-3.png'),
         ],
-        name: `	Bình Tưới Cây Greenhome, Dudaco, 2 Lít, Phun Xa 2 Chế Độ, Bơm Nhẹ Tay, Bình Tưới Cây Phun Sương, Bền	`,
+        name: `Bình Tưới Cây Greenhome, Dudaco, 2 Lít, Phun Xa 2 Chế Độ, Bơm Nhẹ Tay, Bình Tưới Cây Phun Sương, Bền	`,
         buyCount: 2730,
         rate: 4.9,
         price: 58000,
@@ -1251,7 +1250,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro3-2.png'),
             require('../assets/photos/product/pro3-3.png'),
         ],
-        name: `	Xẻng Xúc Đất D30x7, 5cm, Chia Vạch, Hợp Kim Nhôm Chống Gỉ, Tay Cầm Cao Su Chống Trượt	`,
+        name: `Xẻng Xúc Đất D30x7, 5cm, Chia Vạch, Hợp Kim Nhôm Chống Gỉ, Tay Cầm Cao Su Chống Trượt	`,
         buyCount: 75,
         rate: 5.0,
         price: 172000,
@@ -1276,7 +1275,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro4-2.png'),
             require('../assets/photos/product/pro4-3.png'),
         ],
-        name: `	BÌNH XỊT CÔN TRÙNG RAID HƯƠNG CAM CHANH / KHÔNG MÙI / LAVENDER 700ML	`,
+        name: `BÌNH XỊT CÔN TRÙNG RAID HƯƠNG CAM CHANH / KHÔNG MÙI / LAVENDER 700ML	`,
         buyCount: 401,
         rate: 4.8,
         price: 70000,
@@ -1321,7 +1320,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro5-2.png'),
             require('../assets/photos/product/pro5-3.png'),
         ],
-        name: `	Thuốc diệt gián sinh học AMB, Viện Hàn lâm khoa học Việt Nam, diệt tận gốc tất cả các loại gián, hiệu quả, diệt gián	`,
+        name: `Thuốc diệt gián sinh học AMB, Viện Hàn lâm khoa học Việt Nam, diệt tận gốc tất cả các loại gián, hiệu quả, diệt gián	`,
         buyCount: 4256,
         rate: 4.8,
         price: 23000,
@@ -1348,7 +1347,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro6-2.png'),
             require('../assets/photos/product/pro6-3.png'),
         ],
-        name: `	Viên nén viên xơ dừa combo 10 viên, đất sạch hữu cơ vi sinh, đất trồng cây TOTT’s fertilizer	`,
+        name: `Viên nén viên xơ dừa combo 10 viên, đất sạch hữu cơ vi sinh, đất trồng cây TOTT’s fertilizer	`,
         buyCount: 3842,
         rate: 4.8,
         price: 99000,
@@ -1380,7 +1379,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro7-2.png'),
             require('../assets/photos/product/pro7-3.png'),
         ],
-        name: `	Bộ 3 Món Dụng Cụ Làm Vườn To(Xẻng Làm Vườn - Xới Đất - Cào Đất) 	`,
+        name: `Bộ 3 Món Dụng Cụ Làm Vườn To(Xẻng Làm Vườn - Xới Đất - Cào Đất) 	`,
         buyCount: 582,
         rate: 4.8,
         price: 34000,
@@ -1410,7 +1409,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro8-2.png'),
             require('../assets/photos/product/pro8-3.png'),
         ],
-        name: `	Que cắm tưới lắp chai nhựa Đầu cắm tưới nhỏ giọt điều chỉnh lắp chai Đầu tưới cây tự động	`,
+        name: `Que cắm tưới lắp chai nhựa Đầu cắm tưới nhỏ giọt điều chỉnh lắp chai Đầu tưới cây tự động	`,
         buyCount: 536,
         rate: 4.9,
         price: 11500,
@@ -1440,7 +1439,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro9-2.png'),
             require('../assets/photos/product/pro9-3.png'),
         ],
-        name: `	Găng tay làm vườn thiết kế thông minh hỗ trợ móng vuốt dùng cào xới đất	`,
+        name: `Găng tay làm vườn thiết kế thông minh hỗ trợ móng vuốt dùng cào xới đất	`,
         buyCount: 504,
         rate: 4.8,
         price: 34000,
@@ -1458,7 +1457,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro10-2.png'),
             require('../assets/photos/product/pro10-3.png'),
         ],
-        name: `	CHẬU TRỒNG RAU, TRỒNG HOA CÂY CẢNH CÓ VỈ THOÁT NƯỚC THÔNG MINH	`,
+        name: `CHẬU TRỒNG RAU, TRỒNG HOA CÂY CẢNH CÓ VỈ THOÁT NƯỚC THÔNG MINH	`,
         buyCount: 20798,
         rate: 4.8,
         price: 15000,
@@ -1479,7 +1478,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro11-2.png'),
             require('../assets/photos/product/pro11-3.png'),
         ],
-        name: `	Đất Sạch Trồng Rau, Hoa Kiểng Lavamix 6.5dm Tiện Lợi, Dễ Sử Dụng	`,
+        name: `Đất Sạch Trồng Rau, Hoa Kiểng Lavamix 6.5dm Tiện Lợi, Dễ Sử Dụng	`,
         buyCount: 17600,
         rate: 4.9,
         price: 23000,
@@ -1513,7 +1512,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro12-2.png'),
             require('../assets/photos/product/pro12-3.png'),
         ],
-        name: `	 Dừa cắt miếng ONEFARMS đã tán, dừa cục, xơ dừa cục size 1, 2, 3cm, đã xử lý trát	`,
+        name: ` Dừa cắt miếng ONEFARMS đã tán, dừa cục, xơ dừa cục size 1, 2, 3cm, đã xử lý trát	`,
         buyCount: 2476,
         rate: 4.9,
         price: 14000,
@@ -1539,7 +1538,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro13-2.png'),
             require('../assets/photos/product/pro13-3.png'),
         ],
-        name: `	1kg Đất sạch vi sinh siêu dinh dưỡng - Đất đa dụng sạch giàu dinh dưỡng dung để trồng hoa cây cảnh	`,
+        name: `1kg Đất sạch vi sinh siêu dinh dưỡng - Đất đa dụng sạch giàu dinh dưỡng dung để trồng hoa cây cảnh	`,
         buyCount: 2223,
         rate: 4.9,
         price: 5000,
@@ -1561,7 +1560,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro14-2.png'),
             require('../assets/photos/product/pro14-3.png'),
         ],
-        name: `	Đá Perlite trồng cây trồng hoa hồng trồng sen cân nặng khoảng 0.5kg	`,
+        name: `Đá Perlite trồng cây trồng hoa hồng trồng sen cân nặng khoảng 0.5kg	`,
         buyCount: 2854,
         rate: 4.9,
         price: 19000,
@@ -1585,7 +1584,7 @@ export const products: FormatData.ProductInfo[] = [
             require('../assets/photos/product/pro15-1.png'),
             require('../assets/photos/product/pro15-2.png'),
         ],
-        name: `	Đất sạch dinh dưỡng tribat bao to 20dm3, đất trồng dùng không thay thế trồng rau mầm, hoa, tulip GiongRauSach	`,
+        name: `Đất sạch dinh dưỡng tribat bao to 20dm3, đất trồng dùng không thay thế trồng rau mầm, hoa, tulip GiongRauSach	`,
         buyCount: 183,
         rate: 5.0,
         price: 49000,
