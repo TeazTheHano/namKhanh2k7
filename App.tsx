@@ -21,6 +21,10 @@ import Community from './screens/Community';
 import ListView from './screens/ListView';
 import TreeDetail from './screens/TreeDetail';
 import ProductDetail from './screens/ProductDetail';
+import Noti from './screens/Noti';
+import Cart from './screens/Cart';
+import CareDetail from './screens/CareDetail';
+import MyTreeList from './screens/MyTreeList';
 
 // ____________________END OF IMPORT_______________________
 
@@ -44,6 +48,10 @@ function App(): React.JSX.Element {
           <Stack.Screen name="ListView" component={ListView} />
           <Stack.Screen name="TreeDetail" component={TreeDetail} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
+          <Stack.Screen name="Noti" component={Noti} />
+          <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="CareDetail" component={CareDetail} />
+          <Stack.Screen name="MyTreeList" component={MyTreeList} />
         </Stack.Navigator>
       </NavigationContainer>
     </ProviderTotal>

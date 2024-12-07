@@ -42,7 +42,7 @@ export default function Shop() {
 
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
-      <TopNav title={'Gian hàng'} returnPreScreen returnPreScreenFnc={()=>{}} rightIcon={SVG.cart(vw(6), vw(6))}  leftIcon={SVG.searchIcon}/>
+      <TopNav title={'Gian hàng'} returnPreScreen returnPreScreenFnc={() => { }} rightIcon={SVG.cart(vw(6), vw(6))} leftIcon={SVG.searchIcon} rightFnc={() => { navigation.navigate('Cart' as never) }} />
       {products.length > 0 ?
         <FlatList
           data={products}

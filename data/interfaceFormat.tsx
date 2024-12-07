@@ -6,6 +6,8 @@ export interface StorageItem {
     }
     myTree: TreeData[],
     favTree: TreeData[],
+    nextCare: CareActivity[]
+    careHistory: CareActivity[]
 }
 
 export interface UserFormat {
@@ -40,4 +42,10 @@ export interface ProductInfo {
     price: number,
     rate: number,
     info: any[],
+}
+
+export interface CareActivity {
+    title: string,
+    time: Date,
+    targetId: string
 }

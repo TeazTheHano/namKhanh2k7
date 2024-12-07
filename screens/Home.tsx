@@ -148,7 +148,7 @@ export default function Home() {
 
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1} >
-      <TopNav title='Trang chủ' rightIcon={SVG.bellIcon(vw(6), vw(6))} />
+      <TopNav title='Trang chủ' rightIcon={SVG.bellStroke(vw(6), vw(6))} rightFnc={() => navigation.navigate('Noti' as never)} />
       <ScrollView style={[styles.flex1, styles.paddingH6vw, {}]} contentContainerStyle={[styles.gap6vw]}>
         <ViewCol style={[styles.gap2vw, styles.bgcolorWhite, styles.paddingH5vw, styles.paddingV4vw, styles.borderRadius20, styles.overflowHidden]}>
           {errMessage ? <Nunito14Reg color='#FF0000' style={[styles.textCenter]}>{errMessage}</Nunito14Reg> : null}
@@ -190,7 +190,7 @@ export default function Home() {
 
         <ViewRowBetweenCenter style={[styles.borderRadius3vw, styles.padding4vw, styles.paddingV2vw, styles.shadowW0H075Black, { backgroundColor: clrStyle.main1, }]}>
           <Nunito16Bold>Cây trồng của bạn</Nunito16Bold>
-          <TouchableOpacity onPress={() => { navigation.navigate('ListView', { cate: 'myTree' }) }}
+          <TouchableOpacity onPress={() => { navigation.navigate('MyTreeList' as never) }}
             style={[styles.padding2vw, styles.paddingH3vw, styles.borderRadius2vw, styles.bgcolorWhite]}>
             <Nunito12Bold color={clrStyle.main3}>Xem thêm</Nunito12Bold>
           </TouchableOpacity>

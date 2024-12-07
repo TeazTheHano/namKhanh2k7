@@ -38,9 +38,13 @@ export default function ProductDetail({ route }: any) {
     const MemorizedAddToCardIcon = useMemo(() => addToCartIcon(), [])
     const MemorizedBuyNowIcon = useMemo(() => buyNowIcon(), [])
 
+    function addToCardFnc() {
+
+    }
+
     return (
         <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
-            <TopNav title={'Gian hàng'} returnPreScreen returnPreScreenFnc={() => { navigation.goBack() }} rightIcon={SVG.cart(vw(6), vw(6))} />
+            <TopNav title={'Gian hàng'} returnPreScreen returnPreScreenFnc={() => { navigation.goBack() }} rightIcon={SVG.cart(vw(6), vw(6))} rightFnc={() => navigation.navigate('Cart' as never)} />
             <ScrollView style={[styles.flex1, styles.paddingH6vw, { marginBottom: -insets.bottom }]} contentContainerStyle={[styles.justifyContentCenter, styles.gap4vw]}>
                 <Nunito18Bold>{route.params.product.name}</Nunito18Bold>
                 <ViewRow style={[styles.gap6vw]}>
@@ -77,8 +81,12 @@ export default function ProductDetail({ route }: any) {
                             </ViewRow>
                         </ViewRowStartCenter>
 
-                        {MemorizedAddToCardIcon}
-                        {MemorizedBuyNowIcon}
+                        <TouchableOpacity onPress={addToCardFnc}>
+                            {MemorizedAddToCardIcon}
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => { Alert.alert('Tính năng đang phát triển') }}>
+                            {MemorizedBuyNowIcon}
+                        </TouchableOpacity>
                     </ViewCol>
                 </ViewRow>
 
