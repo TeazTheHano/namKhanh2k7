@@ -17,9 +17,10 @@ import Home from './screens/Home';
 import User from './screens/User';
 import Shop from './screens/Shop';
 import Community from './screens/Community';
-import ListView from './screens/ListView';
 // >>>>>>>>>>
+import ListView from './screens/ListView';
 import TreeDetail from './screens/TreeDetail';
+import ProductDetail from './screens/ProductDetail';
 
 // ____________________END OF IMPORT_______________________
 
@@ -42,6 +43,7 @@ function App(): React.JSX.Element {
           {/* >>>> */}
           <Stack.Screen name="ListView" component={ListView} />
           <Stack.Screen name="TreeDetail" component={TreeDetail} />
+          <Stack.Screen name="ProductDetail" component={ProductDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </ProviderTotal>

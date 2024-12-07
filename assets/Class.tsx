@@ -760,9 +760,10 @@ export class TopNav extends Component<{
     rightIcon?: any,
     rightFnc?: () => void,
     hideChildren?: any,
+    leftIcon?: any,
 }> {
     render() {
-        const { children, title, returnPreScreen, returnPreScreenFnc, rightIcon, rightFnc, hideChildren } = this.props;
+        const { children, title, returnPreScreen, returnPreScreenFnc, rightIcon, rightFnc, hideChildren, leftIcon } = this.props;
         return (
             <>
                 <Animated.View style={[styles.paddingH4vw, styles.paddingBottom4vw, styles.paddingTop2vw, styles.overflowHidden, { zIndex: 1, borderBottomLeftRadius: vw(6), borderBottomRightRadius: vw(6), }]}>
@@ -771,7 +772,7 @@ export class TopNav extends Component<{
                             <TouchableOpacity
                                 style={[styles.padding2vw]}
                                 onPress={returnPreScreenFnc}>
-                                {SVG.sharpLeftArrow(vw(6), vw(6), clrStyle.grey1)}
+                                {leftIcon ? leftIcon(vw(6), vw(6), clrStyle.grey1) : SVG.sharpLeftArrow(vw(6), vw(6), clrStyle.grey1)}
                             </TouchableOpacity>
                             : <View style={[{ width: vw(10), height: vw(10), }]} />
                         }

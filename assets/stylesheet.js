@@ -98,6 +98,10 @@ const styles = StyleSheet.create({
         width: '25%',
     },
 
+    w25vw: {
+        width: vw(25),
+    },
+
     w20: {
         width: '20%',
     },

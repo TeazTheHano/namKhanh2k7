@@ -25,7 +25,7 @@ export default function TreeDetail({ route }: any) {
     useEffect(() => {
         const checkFavTree = async () => {
             const res = await getStorageList('favTree');
-            if (res && res?.includes(route.params?.tree?.name)) {
+            if (res && res?.includes(route.params?.tree)) {
                 setIsFav(true);
             }
         };
@@ -41,7 +41,7 @@ export default function TreeDetail({ route }: any) {
             await removeStorageItem('favTree', `fav-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`);
         } else {
             setIsFav(true);
-            await saveStorageItem('favTree', route.params?.tree?.name, `fav-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`);
+            await saveStorageItem('favTree', route.params?.tree, `fav-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`);
         }
     }
 
@@ -50,7 +50,7 @@ export default function TreeDetail({ route }: any) {
         if (res && res?.includes(route.params?.tree?.name)) {
             Alert.alert('Cây đã trong vườn của bạn rồi')
         } else {
-            saveStorageItem('myTree', route.params?.tree?.name, `my-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`).then((res) => {
+            saveStorageItem('myTree', route.params?.tree, `my-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`).then((res) => {
                 res ? Alert.alert('Thêm thành công') : Alert.alert('Vui lòng thử lại')
             })
         }

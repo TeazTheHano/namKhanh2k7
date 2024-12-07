@@ -4,8 +4,8 @@ export interface StorageItem {
         lat: number,
         lng: number
     }
-    myTree: string[],
-    favTree: string[],
+    myTree: TreeData[],
+    favTree: TreeData[],
 }
 
 export interface UserFormat {
