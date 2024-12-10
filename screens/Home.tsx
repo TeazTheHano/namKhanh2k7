@@ -120,13 +120,15 @@ export default function Home() {
 
   useEffect(() => {
     setDayOrNight(new Date().getHours() < 18 ? 'd' : 'n');
-    getStorageItem('location').then((res) => {
-      if (res) {
-        dispatch(currentSetLocation(res));
-      } else {
-        requestLocation();
-      }
-    })
+    requestLocation().then(() => {
+      getStorageItem('location').then((res) => {
+        if (res) {
+          dispatch(currentSetLocation(res));
+        } else {
+          requestLocation();
+        }
+      })
+    });
   }, [])
 
   useEffect(() => {

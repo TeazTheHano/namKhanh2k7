@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { getStorageItem, getStorageList, getUser, saveStorageItem } from '../data/storageFunc'
 import { BannerSliderWithCenter, NotiBanner, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRow, ViewRowBetweenCenter, ViewRowCenter } from '../assets/Class'
 import { Nunito12Bold, Nunito12Reg, Nunito14Bold, Nunito14Reg, Nunito16Bold, Nunito18Bold, Nunito20Bold, } from '../assets/CustomText'
@@ -12,6 +12,7 @@ import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../da
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import { marginBottomForScrollView } from '../assets/component'
 import { CareActivity, TreeData } from '../data/interfaceFormat'
+import { SvgXml } from 'react-native-svg'
 
 export default function MyTreeList() {
   const navigation = useNavigation();
@@ -41,6 +42,9 @@ export default function MyTreeList() {
     return unsubscribe
   }, [navigation])
 
+  const checkedIcon = () => <SvgXml xml={`<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 7.5L9.00004 18.5L3.99994 13.5" stroke="#4A9300" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />
+  const MemorizedCheckedIcon = useMemo(() => checkedIcon(), [])
+
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
       <TopNav title='Cây trồng của bạn' returnPreScreen returnPreScreenFnc={navigation.goBack} rightIcon={SVG.addTo(vw(6), vw(6), clrStyle.grey1)} />
@@ -59,7 +63,7 @@ export default function MyTreeList() {
             data={myTree}
             renderItem={({ item, index }) => {
               return (
-                <TouchableOpacity key={index} onPress={() => { navigation.navigate('TreeDetail', { tree: item }) }}
+                <TouchableOpacity key={index} onPress={() => { navigation.navigate('CareDetail', { tree: item }) }}
                   style={[styles.borderRadius10, styles.bgcolorWhite, { width: showAllTree ? vw(40) : vw(35) }]}>
                   <ViewCol >
                     <Image source={item.img} resizeMode='cover' resizeMethod='resize' style={[styles.w100, styles.h25vw, styles.borderRadius10] as ImageStyle} />
@@ -109,7 +113,14 @@ export default function MyTreeList() {
           careHistory.length > 0 ?
             < FlatList
               data={careHistory}
-              renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} />}
+              renderItem={({ item, index }) => {
+                return (
+                  <ViewRow style={[styles.gap2vw]}>
+                    {MemorizedCheckedIcon}
+                    <NotiBanner title={item.title} time={item.time} />
+                  </ViewRow>
+                )
+              }}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={[styles.gap4vw]}
