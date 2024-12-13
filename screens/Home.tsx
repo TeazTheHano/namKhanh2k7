@@ -57,7 +57,7 @@ export default function Home() {
   }
 
   const options = {
-    enableHighAccuracy: true,
+    enableHighAccuracy: false,
     timeout: 5000,
     maximumAge: 0,
     distanceFilter: 1,
@@ -68,12 +68,13 @@ export default function Home() {
     },
   };
 
+  // Function to fetch weather data
   const fetchWeather = async () => {
     console.log(CurrentCache.location);
 
     try {
       const weatherResponse = await fetch(
-        `http://api.weatherapi.com/v1/current.json?key=${Config.WEATHER_API}&q=${CurrentCache.location.lat},${CurrentCache.location.lng}&lang=vi&aqi=no`
+        `https://api.weatherapi.com/v1/current.json?key=${Config.WEATHER_API}&q=${CurrentCache.location.lat},${CurrentCache.location.lng}&lang=vi&aqi=no`
       );
       const weatherData = await weatherResponse.json();
       dispatch(currentSetCurrentWeather(weatherData));
@@ -118,6 +119,7 @@ export default function Home() {
     }
   };
 
+  // Request Location
   useEffect(() => {
     setDayOrNight(new Date().getHours() < 18 ? 'd' : 'n');
     requestLocation().then(() => {
@@ -131,12 +133,14 @@ export default function Home() {
     });
   }, [])
 
+  // Request Weather
   useEffect(() => {
     if (CurrentCache.location.lat && CurrentCache.location.lng) {
       fetchWeather();
     }
   }, [CurrentCache.location])
 
+  // Request My Tree
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getStorageList('myTree').then((res) => {
@@ -168,7 +172,7 @@ export default function Home() {
               <Image source={weatherIconSrc} resizeMode='contain' resizeMethod='resize' style={[{ width: vw(28), height: vw(28) } as ImageStyle]} />
               <ViewRowCenter style={[styles.gap1vw]}>
                 {SVG.pingIcon(vw(4), vw(4))}
-                <Nunito14Reg color={clrStyle.grey1} >{CurrentCache.currentWeather?.location?.name || ''}, {new Date(CurrentCache.currentWeather?.current?.last_updated_epoch * 1000).toLocaleString().slice(0, 5)}</Nunito14Reg>
+                <Nunito14Reg color={clrStyle.grey1} >{CurrentCache.currentWeather?.location?.name || ''}, {new Date(CurrentCache.currentWeather?.current?.last_updated_epoch * 1000).toLocaleString('vi-VN').slice(0, 5)}</Nunito14Reg>
                 <TouchableOpacity onPress={() => { }}>{SVG.editIcon(vw(4), vw(4))}</TouchableOpacity>
               </ViewRowCenter>
             </ViewColBetweenCenter>
