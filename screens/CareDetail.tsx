@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { getStorageItem, getStorageList, getUser, saveStorageItem } from '../data/storageFunc'
 import { BannerSliderWithCenter, NotiBanner, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRow, ViewRowBetweenCenter, ViewRowCenter } from '../assets/Class'
 import { Nunito12Bold, Nunito12Reg, Nunito14Bold, Nunito14Reg, Nunito16Bold, Nunito18Bold, Nunito20Bold, } from '../assets/CustomText'
 import clrStyle, { componentStyle } from '../assets/componentStyleSheet'
@@ -12,6 +11,7 @@ import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../da
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import { marginBottomForScrollView } from '../assets/component'
 import { CareActivity, TreeData } from '../data/interfaceFormat'
+import { storageGetList } from '../data/storageFunc'
 export default function CareDetail({ route }: any) {
     const navigation = useNavigation()
 
@@ -19,7 +19,7 @@ export default function CareDetail({ route }: any) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            getStorageItem('careHistory').then((res) => {
+            storageGetList('careHistory').then((res) => {
                 if (res && res.length > 0) {
                     let result = res.filter((item: CareActivity) => item.targetId === `my-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`)
                 }

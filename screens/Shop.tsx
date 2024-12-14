@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { getStorageItem, getStorageList, getUser, removeStorageItem, saveStorageItem } from '../data/storageFunc'
 import { BannerSliderWithCenter, RoundBtn, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRow, ViewRowBetweenCenter, ViewRowCenter, ViewRowEvenlyCenter, ViewRowStartCenter } from '../assets/Class'
 import { Nunito12Bold, Nunito14Reg, Nunito14Bold, Nunito16Bold, Nunito18Bold, Nunito20Bold, Nunito12Reg, } from '../assets/CustomText'
 import clrStyle, { componentStyle } from '../assets/componentStyleSheet'

@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { getStorageItem, getStorageList, getUser, removeStorageItem, saveStorageItem } from '../data/storageFunc'
 import { BannerSliderWithCenter, RoundBtn, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRow, ViewRowBetweenCenter, ViewRowCenter, ViewRowEvenlyCenter } from '../assets/Class'
 import { Nunito12Bold, Nunito14Reg, Nunito14Bold, Nunito16Bold, Nunito18Bold, Nunito20Bold, } from '../assets/CustomText'
 import clrStyle, { componentStyle } from '../assets/componentStyleSheet'
@@ -12,6 +11,7 @@ import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../da
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import { ListGen, marginBottomForScrollView } from '../assets/component'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { storageAddToList, storageGetItem, storageGetList, storageRemove, storageSaveAndOverwrite } from '../data/storageFunc'
 
 export default function TreeDetail({ route }: any) {
     const navigation = useNavigation();
@@ -22,14 +22,16 @@ export default function TreeDetail({ route }: any) {
 
     const [showingCate, setShowingCate] = useState(0);
 
+    let treeID = route.params?.tree?.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, '')
+
     useEffect(() => {
         const checkFavTree = async () => {
-            const res = await getStorageList('favTree');
-            if (res && res?.includes(route.params?.tree)) {
+            const res = await storageGetItem('favTreeItem', treeID);
+
+            if (res) {
                 setIsFav(true);
             }
         };
-
         const unsubscribe = navigation.addListener('focus', checkFavTree);
 
         return unsubscribe;
@@ -38,19 +40,19 @@ export default function TreeDetail({ route }: any) {
     const addToFav = async () => {
         if (isFav) {
             setIsFav(false);
-            await removeStorageItem('favTree', `fav-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`);
+            await storageRemove('favTreeItem', treeID);
         } else {
             setIsFav(true);
-            await saveStorageItem('favTree', route.params?.tree, `fav-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`);
+            await storageSaveAndOverwrite('favTreeItem', route.params?.tree, treeID);
         }
     }
 
     const addToMyTree = async () => {
-        const res = await getStorageList('myTree');
-        if (res && res?.includes(route.params?.tree?.name)) {
+        const res = await storageGetItem('myTreeItem', treeID);
+        if (res) {
             Alert.alert('Cây đã trong vườn của bạn rồi')
         } else {
-            saveStorageItem('myTree', route.params?.tree, `my-${route.params?.tree?.name.replace(/\s/g, '-').toLowerCase()}`).then((res) => {
+            storageSaveAndOverwrite('myTreeItem', route.params?.tree, treeID).then((res) => {
                 res ? Alert.alert('Thêm thành công') : Alert.alert('Vui lòng thử lại')
             })
         }

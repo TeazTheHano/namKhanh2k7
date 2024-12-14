@@ -40,7 +40,7 @@ const ERROR_CLEAR_MESSAGE = `Xoá dữ liệu không thành công`
  * @param data - The user data to be saved.
  * @returns A promise that resolves to `true` if the data was saved successfully, or `false` if there was an error.
  */
-export const saveUser = async (data: FORMATDATA.UserFormat): Promise<boolean> => {
+export const storageSaveUser = async (data: FORMATDATA.UserFormat): Promise<boolean> => {
   try {
     await storage.save({
       key: 'user',
@@ -59,7 +59,7 @@ export const saveUser = async (data: FORMATDATA.UserFormat): Promise<boolean> =>
  *
  * @returns {Promise<FORMATDATA.UserFormat | false>} A promise that resolves to the user data if found, or `false` if an error occurs.
  */
-export const getUser = async (): Promise<FORMATDATA.UserFormat | false> => {
+export const storageGetUser = async (): Promise<FORMATDATA.UserFormat | false> => {
   try {
     const ret: FORMATDATA.UserFormat = await storage.load({
       key: 'user',
@@ -77,7 +77,7 @@ export const getUser = async (): Promise<FORMATDATA.UserFormat | false> => {
  * @returns {Promise<boolean>} A promise that resolves to `true` if the user data was successfully removed,
  *                             or `false` if an error occurred during the removal process.
  */
-export const removeUser = async (): Promise<boolean> => {
+export const storageRemoveUser = async (): Promise<boolean> => {
   try {
     await storage.remove({
       key: 'user',
@@ -91,12 +91,20 @@ export const removeUser = async (): Promise<boolean> => {
 
 // END OF DEFAULT STORAGE FUNCTIONS ______________________________________________________
 
-export const saveStorageItem = async <K extends keyof FORMATDATA.StorageItem>(key: K, item: FORMATDATA.StorageItem[K], id?: string): Promise<boolean> => {
+/**
+ * @description Saves an item to storage. Can use to write/overwrite or create a list with key which can retrieve with `storageGetList`
+ * 
+ * @param key 
+ * @param item 
+ * @param id can use for creating a list with key
+ * @returns 
+ */
+export const storageSaveAndOverwrite = async <K extends keyof FORMATDATA.StorageItem>(key: K, item: FORMATDATA.StorageItem[K], id?: string): Promise<boolean> => {
   try {
     await storage.save({
       key,
-      data: item,
       id,
+      data: item,
     });
     console.log(`Save successfully: ${key} - ${id ? id : ''}`);
 
@@ -107,17 +115,57 @@ export const saveStorageItem = async <K extends keyof FORMATDATA.StorageItem>(ke
   }
 }
 
-export const getStorageList = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<FORMATDATA.StorageItem[K] | false> => {
+/**
+ * @description Adds an item to one Target:Interface[] in storage. Not for creating a list, just add to existing Array item
+ * 
+ * @param key - The storage key, should reference an array.
+ * @param item - The item to be added to the array.
+ * @returns A promise that resolves to `true` if added successfully, or `false` on error.
+ */
+export const storageAddToList = async <K extends keyof FORMATDATA.StorageItem>(
+  key: K,
+  item: FORMATDATA.StorageItem[K],
+): Promise<boolean> => {
   try {
-    const ret = await storage.getAllDataForKey(key) as FORMATDATA.StorageItem[K];
-    return ret;
+    console.log(item);
+
+    // const existingData = await storage.getAllDataForKey(key);
+    const existingData = await storageGetItem(key);
+    console.log(existingData);
+
+    if (existingData && Array.isArray(existingData) && existingData.length > 0) {
+      const itemList = existingData as FORMATDATA.StorageItem[K];
+      // if (Array.isArray(itemList) && Array.isArray(item)) {
+      // const updatedList = [...itemList, ...item];
+      if (Array.isArray(itemList)) {
+        const updatedList = [...itemList, item];
+        console.log(updatedList);
+
+        await storage.save({
+          key,
+          data: updatedList,
+        });
+
+        return true;
+      } else {
+        Alert.alert(ERROR_SAVE_MESSAGE);
+        return false;
+      }
+    }
+    return storageSaveAndOverwrite(key, item);
   } catch (error) {
-    console.log(`Failed to get ${key} list:`, error);
+    console.error(`Failed to add item to list for key: ${key}`, error);
     return false;
   }
 }
 
-export const getStorageItem = async <K extends keyof FORMATDATA.StorageItem>(key: K, id?: string): Promise<FORMATDATA.StorageItem[K] | false> => {
+/**
+ * @description Use ONLY to retrieve one item from storage
+ * @param key 
+ * @param id use if needed
+ * @returns 
+ */
+export const storageGetItem = async <K extends keyof FORMATDATA.StorageItem>(key: K, id?: string): Promise<FORMATDATA.StorageItem[K] | false> => {
   try {
     const ret: FORMATDATA.StorageItem[K] = await storage.load({
       key,
@@ -125,12 +173,27 @@ export const getStorageItem = async <K extends keyof FORMATDATA.StorageItem>(key
     });
     return ret;
   } catch (error) {
-    console.log(`Failed to get ${key} by id:`, error);
+    console.log(`Failed to get ${key} - ${id ? id : ''}`, error);
     return false;
   }
 }
 
-export const removeStorageItem = async <K extends keyof FORMATDATA.StorageItem>(key: K, id?: string): Promise<boolean> => {
+/**
+ * @description Use ONLY to retrieve a list of data from all id of one key
+ * @param key 
+ * @returns an Array which whatever data inside
+ */
+export const storageGetList = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<FORMATDATA.StorageItem[K][] | false> => {
+  try {
+    const ret = await storage.getAllDataForKey(key) as FORMATDATA.StorageItem[K][];
+    return ret;
+  } catch (error) {
+    console.log(`Failed to get ${key}`, error);
+    return false;
+  }
+}
+
+export const storageRemove = async <K extends keyof FORMATDATA.StorageItem>(key: K, id?: string): Promise<boolean> => {
   try {
     await storage.remove({
       key,
@@ -138,12 +201,12 @@ export const removeStorageItem = async <K extends keyof FORMATDATA.StorageItem>(
     });
     return true;
   } catch (error) {
-    console.log(`Failed to remove ${key}:`, error);
+    console.log(`Failed to remove ${key} - ${id ? id : ''}:`, error);
     return false;
   }
 }
 
-export const clearStorage = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<boolean> => {
+export const storageClearList = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<boolean> => {
   try {
     await storage.clearMapForKey(key);
     return true;

@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { getStorageItem, getStorageList, getUser, saveStorageItem } from '../data/storageFunc'
+import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert, RefreshControl } from 'react-native'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { BannerSliderWithCenter, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRowBetweenCenter, ViewRowCenter } from '../assets/Class'
 import { Nunito12Bold, Nunito12Reg, Nunito14Bold, Nunito14Reg, Nunito16Bold, Nunito18Bold, Nunito20Bold, } from '../assets/CustomText'
 import clrStyle, { componentStyle } from '../assets/componentStyleSheet'
@@ -14,6 +13,8 @@ import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import Geolocation from '@react-native-community/geolocation';
 import Config from "react-native-config";
 import { TreeData } from '../data/interfaceFormat'
+import { onRefresh } from '../assets/component'
+import { storageGetItem, storageGetList, storageSaveAndOverwrite } from '../data/storageFunc'
 
 export default function Home() {
   const navigation = useNavigation();
@@ -27,6 +28,9 @@ export default function Home() {
   const [myTree, setMyTree] = useState<TreeData[]>([]);
   const [limitmyTree, setLimitMyTree] = useState(true);
   const [limitTree, setLimitTree] = useState(true);
+  const [isRefresh, setIsRefresh] = useState(false);
+
+  const [newsData, setNewsData] = useState();
 
   async function requestLocation() {
     Geolocation.requestAuthorization(() => { Geolocation.getCurrentPosition(success, error, options) });
@@ -35,13 +39,13 @@ export default function Home() {
   const success = (position: any) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    saveStorageItem('location', { lat: latitude, lng: longitude });
+    storageSaveAndOverwrite('location', { lat: latitude, lng: longitude });
     dispatch(currentSetLocation({ lat: latitude, lng: longitude }));
   }
 
   let retryCountLocation = 0;
   let retryCountWeather = 0;
-  const maxRetries = 3;
+  const maxRetries = 5;
 
   const error = (error: any) => {
     console.log(Platform.OS, 'Home.tsx - Getting Location Error', error);
@@ -51,7 +55,7 @@ export default function Home() {
       requestLocation();
     } else {
       console.log(Platform.OS, 'Max retries reached. Unable to get location. Setting default to Hanois coordinates.');
-      saveStorageItem('location', { lat: 21.0286, lng: 105.8431 });
+      storageSaveAndOverwrite('location', { lat: 21.0286, lng: 105.8431 });
       dispatch(currentSetLocation({ lat: 21.0286, lng: 105.8431 }));
     }
   }
@@ -70,19 +74,18 @@ export default function Home() {
 
   // Function to fetch weather data
   const fetchWeather = async () => {
-    console.log(CurrentCache.location);
-
     try {
       const weatherResponse = await fetch(
         `https://api.weatherapi.com/v1/current.json?key=${Config.WEATHER_API}&q=${CurrentCache.location.lat},${CurrentCache.location.lng}&lang=vi&aqi=no`
       );
       const weatherData = await weatherResponse.json();
+
       dispatch(currentSetCurrentWeather(weatherData));
       setWeatherIconSrc(iconRequireList[`${dayOrNight}${weatherData.current.condition.code}` as keyof typeof iconRequireList]);
 
       if (weatherData.error) {
         console.error(Platform.OS, 'Error fetching weather data, try to get city location:', weatherData.error);
-        const storedLocation = await getStorageItem('location');
+        const storedLocation = await storageGetItem('location');
         if (storedLocation) {
           const { lat, lng } = storedLocation;
           const geoCodingUrl = `https://api-bdc.net/data/reverse-geocode?latitude=${lat}&longitude=${lng}&localityLanguage=en&key=${Config.BIG_DATA_API}`;
@@ -95,7 +98,7 @@ export default function Home() {
           const cityWeatherData = await cityWeatherResponse.json();
 
           dispatch(currentSetLocation({ lat: cityWeatherData.location.lat, lng: cityWeatherData.location.lon }));
-          saveStorageItem('location', { lat: cityWeatherData.location.lat, lng: cityWeatherData.location.lon });
+          storageSaveAndOverwrite('location', { lat: cityWeatherData.location.lat, lng: cityWeatherData.location.lon });
           setWeatherIconSrc(iconRequireList[`${dayOrNight}${cityWeatherData.current.condition.code}` as keyof typeof iconRequireList]);
           dispatch(currentSetCurrentWeather(cityWeatherData));
         }
@@ -123,7 +126,7 @@ export default function Home() {
   useEffect(() => {
     setDayOrNight(new Date().getHours() < 18 ? 'd' : 'n');
     requestLocation().then(() => {
-      getStorageItem('location').then((res) => {
+      storageGetItem('location').then((res) => {
         if (res) {
           dispatch(currentSetLocation(res));
         } else {
@@ -143,7 +146,7 @@ export default function Home() {
   // Request My Tree
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      getStorageList('myTree').then((res) => {
+      storageGetList('myTreeItem').then((res) => {
         if (res) {
           setMyTree(res)
         }
@@ -152,41 +155,68 @@ export default function Home() {
     return unsubscribe
   }, [navigation])
 
+  useEffect(() => {
+    if (isRefresh) {
+      setIsShowMore(false)
+      setIsRefresh(false)
+      fetchWeather();
+    }
+  }, [isRefresh])
+
+  const WEATHERCLASS = useMemo(() => {
+    return (
+      <>
+        <ViewRowBetweenCenter style={[styles.flex1]}>
+          {/*  */}
+          <ViewCol style={[styles.gap1vw]}>
+            <Nunito12Bold color={clrStyle.main2} style={{ fontSize: vw(11) }}>{CurrentCache.currentWeather?.current?.temp_c || 0}°</Nunito12Bold>
+            <Nunito18Bold>{CurrentCache.currentWeather?.current?.condition?.text || ''}</Nunito18Bold>
+            <Nunito14Bold color={clrStyle.grey1}>Độ ẩm: {CurrentCache.currentWeather?.current?.humidity || 0}%</Nunito14Bold>
+            <Nunito14Bold color={clrStyle.grey1}>Cảm nhận: {CurrentCache.currentWeather?.current?.feelslike_c || 0}°</Nunito14Bold>
+          </ViewCol>
+          {/*  */}
+          <ViewColBetweenCenter style={[styles.h100]}>
+            {/* TODO: change icon */}
+            <Image source={weatherIconSrc} resizeMode='contain' resizeMethod='resize' style={[{ width: vw(28), height: vw(28) } as ImageStyle]} />
+            <ViewRowCenter style={[styles.gap1vw]}>
+              {SVG.pingIcon(vw(4), vw(4))}
+              <Nunito14Reg color={clrStyle.grey1} >{CurrentCache.currentWeather?.location?.name || ''}, {new Date(CurrentCache.currentWeather?.current?.last_updated_epoch * 1000).toLocaleString('vi-VN').slice(0, 5)}</Nunito14Reg>
+              <TouchableOpacity onPress={() => { }}>{SVG.editIcon(vw(4), vw(4))}</TouchableOpacity>
+            </ViewRowCenter>
+          </ViewColBetweenCenter>
+        </ViewRowBetweenCenter>
+
+        {isShowMore ?
+          <ViewCol style={[styles.gap1vw]}>
+            <Nunito14Bold color={clrStyle.grey1}>Tốc độ gió: {CurrentCache.currentWeather?.current?.wind_kph || 0}km/h</Nunito14Bold>
+            <Nunito14Bold color={clrStyle.grey1}>Hướng gió: {CurrentCache.currentWeather?.current?.wind_dir || ''}</Nunito14Bold>
+            <Nunito14Bold color={clrStyle.grey1}>Gió giật: {CurrentCache.currentWeather?.current?.gust_kph || 0}</Nunito14Bold>
+            <Nunito14Bold color={clrStyle.grey1}>Tia cực tím: {CurrentCache.currentWeather?.current?.uv || 0}</Nunito14Bold>
+            <Nunito14Bold color={clrStyle.grey1}>Áp suất khí quyển: {CurrentCache.currentWeather?.current?.pressure_mb || 0}mb</Nunito14Bold>
+          </ViewCol>
+          : null
+        }
+      </>
+    )
+  }, [CurrentCache.currentWeather, isShowMore])
+
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1} >
       <TopNav title='Trang chủ' rightIcon={SVG.bellStroke(vw(6), vw(6))} rightFnc={() => navigation.navigate('Noti' as never)} />
-      <ScrollView style={[styles.flex1, styles.paddingH6vw, {}]} contentContainerStyle={[styles.gap6vw]}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefresh}
+            onRefresh={() => {
+              setIsRefresh(true)
+            }}
+          />
+        }
+        style={[styles.flex1, styles.paddingH6vw, {}]} contentContainerStyle={[styles.gap6vw]}>
         <ViewCol style={[styles.gap2vw, styles.bgcolorWhite, styles.paddingH5vw, styles.paddingV4vw, styles.borderRadius20, styles.overflowHidden]}>
           {errMessage ? <Nunito14Reg color='#FF0000' style={[styles.textCenter]}>{errMessage}</Nunito14Reg> : null}
-          <ViewRowBetweenCenter style={[styles.flex1]}>
-            {/*  */}
-            <ViewCol style={[styles.gap1vw]}>
-              <Nunito12Bold color={clrStyle.main2} style={{ fontSize: vw(11) }}>{CurrentCache.currentWeather?.current?.temp_c || 0}°</Nunito12Bold>
-              <Nunito18Bold>{CurrentCache.currentWeather?.current?.condition?.text || ''}</Nunito18Bold>
-              <Nunito14Bold color={clrStyle.grey1}>Độ ẩm: {CurrentCache.currentWeather?.current?.humidity || 0}%</Nunito14Bold>
-              <Nunito14Bold color={clrStyle.grey1}>Cảm nhận: {CurrentCache.currentWeather?.current?.feelslike_c || 0}°</Nunito14Bold>
-            </ViewCol>
-            {/*  */}
-            <ViewColBetweenCenter style={[styles.h100]}>
-              {/* TODO: change icon */}
-              <Image source={weatherIconSrc} resizeMode='contain' resizeMethod='resize' style={[{ width: vw(28), height: vw(28) } as ImageStyle]} />
-              <ViewRowCenter style={[styles.gap1vw]}>
-                {SVG.pingIcon(vw(4), vw(4))}
-                <Nunito14Reg color={clrStyle.grey1} >{CurrentCache.currentWeather?.location?.name || ''}, {new Date(CurrentCache.currentWeather?.current?.last_updated_epoch * 1000).toLocaleString('vi-VN').slice(0, 5)}</Nunito14Reg>
-                <TouchableOpacity onPress={() => { }}>{SVG.editIcon(vw(4), vw(4))}</TouchableOpacity>
-              </ViewRowCenter>
-            </ViewColBetweenCenter>
-          </ViewRowBetweenCenter>
 
-          {isShowMore ?
-            <ViewCol style={[styles.gap1vw]}>
-              <Nunito14Bold color={clrStyle.grey1}>Tốc độ gió: {CurrentCache.currentWeather?.current?.wind_kph || 0}km/h</Nunito14Bold>
-              <Nunito14Bold color={clrStyle.grey1}>Hướng gió: {CurrentCache.currentWeather?.current?.wind_dir || ''}</Nunito14Bold>
-              <Nunito14Bold color={clrStyle.grey1}>Gió giật: {CurrentCache.currentWeather?.current?.gust_kph || 0}</Nunito14Bold>
-              <Nunito14Bold color={clrStyle.grey1}>Tia cực tím: {CurrentCache.currentWeather?.current?.uv || 0}</Nunito14Bold>
-              <Nunito14Bold color={clrStyle.grey1}>Áp suất khí quyển: {CurrentCache.currentWeather?.current?.pressure_mb || 0}mb</Nunito14Bold>
-            </ViewCol>
-            : null}
+          {WEATHERCLASS}
 
           <TouchableOpacity style={[styles.paddingH3vw, styles.paddingV1vw, styles.alignSelfCenter]}
             onPress={() => { setIsShowMore(!isShowMore) }}>

@@ -6,7 +6,7 @@ import { statusBarTransparency } from '../assets/component'
 import clrStyle from '../assets/componentStyleSheet'
 import { appleLogo, fbLogo, googleLogo } from '../assets/svgXml'
 import { useNavigation } from '@react-navigation/native'
-import storage, { getUser } from '../data/storageFunc'
+import storage, { storageGetUser } from '../data/storageFunc'
 import { LowBtn } from '../assets/Class'
 import { currentSetUser, RootContext } from '../data/store'
 
@@ -15,9 +15,8 @@ export default function LoginOpt() {
     const navigation = useNavigation();
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            getUser().then((res) => {
+            storageGetUser().then((res) => {
                 if (res && res.name) {
-                    console.log(20, Platform.OS,res);
                     dispatch(currentSetUser(res));
                     if (res.synced) {
                         if (res.dataCollect) {
@@ -26,8 +25,6 @@ export default function LoginOpt() {
                             navigation.navigate('DataCollect' as never);
                         }
                     } else {
-                        console.log(27, Platform.OS);
-                        
                         navigation.navigate('DataCollect' as never);
                     }
                 }

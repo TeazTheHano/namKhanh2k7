@@ -4,10 +4,14 @@ export interface StorageItem {
         lat: number,
         lng: number
     }
-    myTree: TreeData[],
-    favTree: TreeData[],
-    nextCare: CareActivity[]
-    careHistory: CareActivity[]
+    myTreeList: TreeData[],
+    myTreeItem: TreeData,
+    favTreeList: TreeData[],
+    favTreeItem: TreeData,
+    nextCareList: CareActivity[]
+    nextCareItem: CareActivity
+    careHistoryList: CareActivity[]
+    careHistoryItem: CareActivity
 }
 
 export interface UserFormat {

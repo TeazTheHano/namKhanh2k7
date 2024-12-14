@@ -8,7 +8,7 @@ import { RegisterWithFirebaseHandle, statusBarTransparency } from '../assets/com
 import clrStyle from '../assets/componentStyleSheet'
 import { useNavigation } from '@react-navigation/native'
 import { shareIcon, sharpLeftArrow, sharpRightArrow } from '../assets/svgXml'
-import { saveUser } from '../data/storageFunc'
+import { storageSaveUser } from '../data/storageFunc'
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth'
 import { currentSetUser, RootContext } from '../data/store'
 
@@ -63,7 +63,7 @@ export default function Register() {
                 createTime: new Date().getTime(),
             }
 
-            saveUser(newUser).then((res) => {
+            storageSaveUser(newUser).then((res) => {
                 setSaveStatus(res ? 2 : 1);
                 if (res) {
                     RegisterWithFirebaseHandle(
@@ -73,7 +73,7 @@ export default function Register() {
                         auth,
                         dispatch,
                         currentSetUser,
-                        saveUser,
+                        storageSaveUser,
                         email,
                         accountName,
                         password

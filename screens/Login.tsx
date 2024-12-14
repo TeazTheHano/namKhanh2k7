@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import { shareIcon, sharpLeftArrow, sharpRightArrow } from '../assets/svgXml'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { currentSetUser, RootContext } from '../data/store'
-import { getUser, saveUser } from '../data/storageFunc'
+import { storageGetUser, storageSaveUser } from '../data/storageFunc'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '..'
 import { UserFormat } from '../data/interfaceFormat'
@@ -38,7 +38,7 @@ export default function Login() {
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
-                getUser().then((res) => {
+                storageGetUser().then((res) => {
                     console.log(res, 42);
 
                     if (res) {
@@ -48,7 +48,7 @@ export default function Login() {
                             dataCollect: docSnap.data().age ? true : false,
                             ...docSnap.data()
                         }
-                        saveUser(newData).then((res) => {
+                        storageSaveUser(newData).then((res) => {
                             if (res) {
                                 dispatch(currentSetUser(newData))
                                 navigation.navigate('BottomTab' as never);
@@ -64,7 +64,7 @@ export default function Login() {
                             data: docSnap.data().data,
                             loginMethod: docSnap.data().loginMethod
                         }
-                        saveUser(newData).then((res) => {
+                        storageSaveUser(newData).then((res) => {
                             if (res) {
                                 console.log(res, 67);
 
@@ -96,7 +96,7 @@ export default function Login() {
             setCurrentStep(currentStep - 1);
         } else if (act && currentStep === list.length - 1) {
             let auth = getAuth();
-            LoginWithFirebaseHandle(email, password, null, signInWithEmailAndPassword, auth, dispatch, currentSetUser, saveUser).then((res) => {
+            LoginWithFirebaseHandle(email, password, null, signInWithEmailAndPassword, auth, dispatch, currentSetUser, storageSaveUser).then((res) => {
                 console.log(res, 97);
                 if (res === true) {
                     getData();

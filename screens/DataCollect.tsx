@@ -8,7 +8,6 @@ import clrStyle from '../assets/componentStyleSheet'
 import { useNavigation } from '@react-navigation/native'
 import { shareIcon, sharpLeftArrow, sharpRightArrow } from '../assets/svgXml'
 
-import storage, { getUser, saveUser } from '../data/storageFunc'
 import { UserFormat } from '../data/interfaceFormat'
 import { Nunito14Reg, Nunito18Reg, Nunito20Bold, Nunito24Bold, Nunito24Reg } from '../assets/CustomText'
 import { currentSetUser, RootContext } from '../data/store'
@@ -16,6 +15,7 @@ import { getAuth, updateProfile } from 'firebase/auth'
 import { db } from '../index'
 import { collection, getDocs, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
 import { FirebaseError } from 'firebase/app'
+import { storageGetUser, storageSaveUser } from '../data/storageFunc'
 
 export default function DataCollect({ route }: any) {
     const navigation = useNavigation();
@@ -118,7 +118,7 @@ export default function DataCollect({ route }: any) {
                     }
                 }
                 setUserInfo({ ...userInfo, age: age, dataCollect: true, synced: false, data: { interest: interest, favorite: favorite, job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet' } })
-                saveUser(userInfo).then((res) => {
+                storageSaveUser(userInfo).then((res) => {
                     console.log(res, 121);
                     dispatch(currentSetUser(userInfo))
 
@@ -126,9 +126,9 @@ export default function DataCollect({ route }: any) {
                         console.log(136, res);
                         if (res) {
                             console.log('138 Data saved');
-                            saveUser({ ...userInfo, synced: true, dataCollect: true }).then((res) => {
+                            storageSaveUser({ ...userInfo, synced: true, dataCollect: true }).then((res) => {
                                 if (res) {
-                                    getUser().then((res) => {
+                                    storageGetUser().then((res) => {
                                         console.log(res, 142);
                                     })
                                     console.log('141 Data saved');
