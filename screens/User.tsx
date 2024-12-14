@@ -8,10 +8,10 @@ export default function User() {
     <SafeAreaView>
       <Text>User</Text>
       <TouchableOpacity onPress={() => {
-        storageClearList('nextCare')
-        storageClearList('favTree')
-        storageClearList('myTree')
-        storageClearList('careHistory')
+        storageClearList('nextCareItem')
+        storageClearList('favTreeItem')
+        storageClearList('myTreeItem')
+        storageClearList('careHistoryItem')
       }}>
         <Text>clear</Text>
       </TouchableOpacity>

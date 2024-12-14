@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../data/store'
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import { marginBottomForScrollView } from '../assets/component'
-import { CareActivity, TreeData } from '../data/interfaceFormat'
+import { CareActivityFormat, TreeDataFormat } from '../data/interfaceFormat'
 import { SvgXml } from 'react-native-svg'
 
 export default function MyTreeList() {
@@ -20,22 +20,25 @@ export default function MyTreeList() {
   const [CurrentCache, dispatch] = React.useContext(RootContext);
 
   const [showAllTree, setShowAllTree] = useState(false);
+  const [showAllCare, setShowAllCare] = useState(false);
 
-  const [myTree, setMyTree] = useState<TreeData[]>([]);
+  const [myTree, setMyTree] = useState<TreeDataFormat[]>([]);
 
-  const [nextCare, setNextCare] = useState<CareActivity[]>([]);
-  const [careHistory, setCareHistory] = useState<CareActivity[]>([]);
+  const [nextCare, setNextCare] = useState<CareActivityFormat[]>([]);
+  const [careHistory, setCareHistory] = useState<CareActivityFormat[]>([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      storageGetList('myTree').then((res) => {
+      storageGetList('myTreeItem').then((res) => {
         if (res) {
           setMyTree(res)
         }
       })
-      storageGetList('careHistory').then((res) => {
+      storageGetList('careHistoryItem').then((res) => {
         if (res) {
           setCareHistory(res)
+          console.log(res);
+
         }
       })
     })
@@ -44,6 +47,33 @@ export default function MyTreeList() {
 
   const checkedIcon = () => <SvgXml xml={`<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 7.5L9.00004 18.5L3.99994 13.5" stroke="#4A9300" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />
   const MemorizedCheckedIcon = useMemo(() => checkedIcon(), [])
+
+  const MYTREELIST = useMemo(() => {
+    return (
+      <ScrollView
+        horizontal={!showAllTree}
+        scrollEnabled={!showAllTree}
+        style={[styles.w100, styles.paddingBottom4vw]}
+        contentContainerStyle={[styles.gap4vw, styles.flexRow, styles.justifyContentSpaceBetween, { flexWrap: showAllTree ? 'wrap' : 'nowrap' }]}
+      >
+        {myTree.length > 0 ? myTree.map((item, index) => {
+          return (
+            <TouchableOpacity key={index} onPress={() => { navigation.navigate('CareDetail', { tree: item }) }}
+              style={[styles.borderRadius10, styles.bgcolorWhite, { width: showAllTree ? vw(42) : vw(35) }]}>
+              <ViewCol >
+                <Image source={item.img} resizeMode='cover' resizeMethod='resize' style={[styles.w100, styles.h25vw, styles.borderRadius10] as ImageStyle} />
+                <Nunito14Bold style={[styles.padding2vw]}>{item.name}</Nunito14Bold>
+                {/* <ViewRowBetweenCenter style={[styles.padding2vw, styles.wfit, styles.margin2vw, styles.borderRadius1vw, { backgroundColor: clrStyle.main5 }]}>
+                {SVG.watering(vw(4), vw(4))}
+                <Nunito12Reg>Cần tưới lúc </Nunito12Reg>
+              </ViewRowBetweenCenter> */}
+              </ViewCol>
+            </TouchableOpacity>
+          )
+        }) : null}
+      </ScrollView>
+    )
+  }, [navigation, myTree, showAllTree]);
 
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
@@ -58,37 +88,12 @@ export default function MyTreeList() {
           </TouchableOpacity>
         </ViewRowBetweenCenter>
 
-        {myTree.length > 0 ?
-          <FlatList
-            data={myTree}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity key={index} onPress={() => { navigation.navigate('CareDetail', { tree: item }) }}
-                  style={[styles.borderRadius10, styles.bgcolorWhite, { width: showAllTree ? vw(40) : vw(35) }]}>
-                  <ViewCol >
-                    <Image source={item.img} resizeMode='cover' resizeMethod='resize' style={[styles.w100, styles.h25vw, styles.borderRadius10] as ImageStyle} />
-                    <Nunito14Bold style={[styles.padding2vw]}>{item.name}</Nunito14Bold>
-                    {/* <ViewRowBetweenCenter style={[styles.padding2vw, styles.wfit, styles.margin2vw, styles.borderRadius1vw, { backgroundColor: clrStyle.main5 }]}>
-                      {SVG.watering(vw(4), vw(4))}
-                      <Nunito12Reg>Cần tưới lúc </Nunito12Reg>
-                    </ViewRowBetweenCenter> */}
-                  </ViewCol>
-                </TouchableOpacity>
-              )
 
-            }}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal={!showAllTree ? true : false}
-            scrollEnabled={!showAllTree ? true : false}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[styles.gap4vw, styles.alignItemsCenter, styles.alignContentCenter, { flexWrap: showAllTree ? 'wrap' : 'nowrap' }]}
-          /> :
-          <Nunito14Bold style={[styles.padding2vw]}>Chưa có cây trồng</Nunito14Bold>
-        }
+        {MYTREELIST}
 
         <ViewRowBetweenCenter style={[styles.borderRadius3vw, styles.padding4vw, styles.paddingV2vw, styles.shadowW0H075Black, { backgroundColor: clrStyle.main1, }]}>
           <Nunito16Bold>Hoạt động chăm sóc</Nunito16Bold>
-          <TouchableOpacity onPress={() => { setShowAllTree(!showAllTree) }}
+          <TouchableOpacity onPress={() => { setShowAllCare(!showAllCare) }}
             style={[styles.padding2vw, styles.paddingH3vw, styles.borderRadius2vw, styles.bgcolorWhite]}>
             <Nunito12Bold color={clrStyle.main3}>Xem lịch</Nunito12Bold>
           </TouchableOpacity>
@@ -99,7 +104,7 @@ export default function MyTreeList() {
           nextCare.length > 0 ?
             < FlatList
               data={nextCare}
-              renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} />}
+              renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} treeName={item.targetName} />}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={[styles.gap4vw]}
@@ -111,13 +116,14 @@ export default function MyTreeList() {
         <Nunito14Bold style={[styles.margin2vw]}>Đã hoàn thành</Nunito14Bold>
         {
           careHistory.length > 0 ?
-            < FlatList
+            <FlatList
+              scrollEnabled={false}
               data={careHistory}
               renderItem={({ item, index }) => {
                 return (
                   <ViewRow style={[styles.gap2vw]}>
                     {MemorizedCheckedIcon}
-                    <NotiBanner title={item.title} time={item.time} />
+                    <NotiBanner title={item.title} time={item.time} treeName={item.targetName} />
                   </ViewRow>
                 )
               }}
@@ -131,6 +137,6 @@ export default function MyTreeList() {
 
         {marginBottomForScrollView()}
       </ScrollView>
-    </SSBarWithSaveArea>
+    </SSBarWithSaveArea >
   )
 }

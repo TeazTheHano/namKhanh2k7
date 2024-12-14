@@ -9,7 +9,7 @@ import * as SVG from '../assets/svgXml'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../data/store'
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
-import { CareActivity } from '../data/interfaceFormat'
+import { CareActivityFormat } from '../data/interfaceFormat'
 
 export default function Noti() {
     const navigation = useNavigation();
@@ -17,7 +17,7 @@ export default function Noti() {
     const [CurrentCache, dispatch] = React.useContext(RootContext);
     const [showingCate, setShowingCate] = useState(0);
 
-    const noti: CareActivity[] = [
+    const noti: CareActivityFormat[] = [
         {
             title: 'Tin tức 1',
             time: new Date(),

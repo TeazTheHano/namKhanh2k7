@@ -831,20 +831,25 @@ export class BannerSliderWithCenter extends Component<{
     }
 }
 
-export class NotiBanner extends Component<{ title: string, time: Date }> {
+export class NotiBanner extends Component<{ title: string, time: number, treeName: string }> {
     render(): React.ReactNode {
+        console.log(typeof this.props.time);
+
         return (
-            <ViewRowBetweenCenter style={[styles.w100, styles.padding2vw, { borderBottomWidth: 1, borderColor: clrStyle.grey2 }]}>
+            <ViewRowBetweenCenter style={[styles.flex1, styles.padding2vw, { borderBottomWidth: 1, borderColor: clrStyle.grey2 }]}>
                 <ViewRow style={[styles.flex1]}>
-                    <View style={[styles.paddingRight2vw, styles.marginRight2vw, { borderRightWidth: 1, borderColor: clrStyle.grey1 }]}><CTEXT.Nunito14Reg>{this.props.time.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</CTEXT.Nunito14Reg></View>
-                    <CTEXT.Nunito14Reg>{this.props.title}</CTEXT.Nunito14Reg>
+                    <View style={[styles.paddingRight2vw, styles.marginRight2vw, { borderRightWidth: 1, borderColor: clrStyle.grey1 }]}><CTEXT.Nunito14Reg>{new Date(this.props.time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</CTEXT.Nunito14Reg></View>
+                    <CTEXT.Nunito14Reg style={[styles.flex1]}>{this.props.title} cho {this.props.treeName}</CTEXT.Nunito14Reg>
                 </ViewRow>
+
                 {
                     this.props.title.toLowerCase().includes('tưới') ?
                         SVG.wateringYellow(vw(9), vw(9))
                         : this.props.title.toLowerCase().includes('bón') ?
-                            SVG.manure(vw(9), vw(9)) : SVG.changeMug(vw(9), vw(9))
+                            SVG.manure(vw(9), vw(9)) :
+                            SVG.changeMug(vw(9), vw(9))
                 }
+
             </ViewRowBetweenCenter>
         )
     }

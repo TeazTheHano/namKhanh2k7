@@ -12,7 +12,7 @@ import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 
 import Geolocation from '@react-native-community/geolocation';
 import Config from "react-native-config";
-import { TreeData } from '../data/interfaceFormat'
+import { TreeDataFormat } from '../data/interfaceFormat'
 import { onRefresh } from '../assets/component'
 import { storageGetItem, storageGetList, storageSaveAndOverwrite } from '../data/storageFunc'
 
@@ -25,7 +25,7 @@ export default function Home() {
   const [errMessage, setErrMessage] = useState('');
   const [isShowMore, setIsShowMore] = useState(false);
 
-  const [myTree, setMyTree] = useState<TreeData[]>([]);
+  const [myTree, setMyTree] = useState<TreeDataFormat[]>([]);
   const [limitmyTree, setLimitMyTree] = useState(true);
   const [limitTree, setLimitTree] = useState(true);
   const [isRefresh, setIsRefresh] = useState(false);

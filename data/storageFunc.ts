@@ -215,3 +215,13 @@ export const storageClearList = async <K extends keyof FORMATDATA.StorageItem>(k
     return false;
   }
 }
+
+export const storageGetAllIDfromKey = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<string[] | false> => {
+  try {
+    const ret = await storage.getIdsForKey(key);
+    return ret;
+  } catch (error) {
+    console.log(`Failed to get all ID from ${key}`, error);
+    return false;
+  }
+}

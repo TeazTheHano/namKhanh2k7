@@ -4,14 +4,14 @@ export interface StorageItem {
         lat: number,
         lng: number
     }
-    myTreeList: TreeData[],
-    myTreeItem: TreeData,
-    favTreeList: TreeData[],
-    favTreeItem: TreeData,
-    nextCareList: CareActivity[]
-    nextCareItem: CareActivity
-    careHistoryList: CareActivity[]
-    careHistoryItem: CareActivity
+    myTreeList: TreeDataFormat[],
+    myTreeItem: TreeDataFormat,
+    favTreeList: TreeDataFormat[],
+    favTreeItem: TreeDataFormat,
+    nextCareList: CareActivityFormat[]
+    nextCareItem: CareActivityFormat
+    careHistoryList: CareActivityFormat[]
+    careHistoryItem: CareActivityFormat
 }
 
 export interface UserFormat {
@@ -28,7 +28,7 @@ export interface UserFormat {
     }
 }
 
-export interface TreeData {
+export interface TreeDataFormat {
     img: any;
     name: string;
     grownTime: string;
@@ -48,8 +48,10 @@ export interface ProductInfo {
     info: any[],
 }
 
-export interface CareActivity {
+export interface CareActivityFormat {
     title: string,
-    time: Date,
+    time: Number,
     targetId: string
+    targetName: string
+    targetImg: any
 }
