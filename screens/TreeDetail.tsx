@@ -19,6 +19,7 @@ export default function TreeDetail({ route }: any) {
 
     const [CurrentCache, dispatch] = React.useContext(RootContext);
     const [isFav, setIsFav] = useState(false);
+    const [isInMyTree, setIsInMyTree] = useState(false);
 
     const [showingCate, setShowingCate] = useState(0);
 
@@ -26,11 +27,16 @@ export default function TreeDetail({ route }: any) {
 
     useEffect(() => {
         const checkFavTree = async () => {
-            const res = await storageGetItem('favTreeItem', treeID);
-
-            if (res) {
-                setIsFav(true);
-            }
+            storageGetItem('favTreeItem', treeID).then((res) => {
+                if (res) {
+                    setIsFav(true);
+                }
+            })
+            storageGetItem('myTreeItem', treeID).then((res) => {
+                if (res) {
+                    setIsInMyTree(true);
+                }
+            })
         };
         const unsubscribe = navigation.addListener('focus', checkFavTree);
 
@@ -53,14 +59,45 @@ export default function TreeDetail({ route }: any) {
             Alert.alert('Cây đã trong vườn của bạn rồi')
         } else {
             storageSaveAndOverwrite('myTreeItem', route.params?.tree, treeID).then((res) => {
-                res ? Alert.alert('Thêm thành công') : Alert.alert('Vui lòng thử lại')
+                if (res) {
+                    Alert.alert('Thêm thành công')
+                    setIsInMyTree(true)
+                } else {
+                    Alert.alert('Vui lòng thử lại')
+                }
             })
         }
     }
 
     return (
         <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
-            <TopNav title={route.params.tree.name || ''} returnPreScreen returnPreScreenFnc={navigation.goBack} rightIcon={SVG.addTo(vw(6), vw(6))} />
+            <TopNav
+                title={route.params.tree.name || ''}
+                returnPreScreen
+                returnPreScreenFnc={navigation.goBack}
+                rightIcon={isInMyTree ? SVG.sharpXIcon(vw(6), vw(6), clrStyle.grey1) : SVG.addTo(vw(6), vw(6))}
+                rightFnc={isInMyTree ? () => {
+                    Alert.alert('Bạn có muốn xoá cây ra khỏi vườn?', '', [
+                        {
+                            text: 'Không',
+                            style: 'cancel'
+                        },
+                        {
+                            text: 'Xoá',
+                            onPress: () => {
+                                storageRemove('myTreeItem', treeID).then((res) => {
+                                    if (res) {
+                                        setIsInMyTree(false);
+                                        Alert.alert('Xoá thành công')
+                                    } else {
+                                        Alert.alert('Vui lòng thử lại')
+                                    }
+                                })
+                            }
+                        }
+                    ])
+                } : () => { addToMyTree() }}
+            />
             <ScrollView style={[styles.flex1, styles.paddingH6vw, { marginBottom: -insets.bottom }]} contentContainerStyle={[styles.justifyContentCenter, styles.gap4vw]}>
                 <Image source={route.params.tree.img} resizeMode='cover' resizeMethod='resize' style={[styles.w100, styles.h50vw, styles.borderRadius10] as ImageStyle} />
                 <ViewRow style={[styles.border1, styles.borderRadius3vw, styles.padding4vw, styles.marginHorizontal10vw, { borderColor: clrStyle.grey2 }]}>
@@ -100,7 +137,7 @@ export default function TreeDetail({ route }: any) {
 
 
             <ViewRowBetweenCenter key={'bottomBtn'} style={[styles.w100vw, styles.borderRadius10, styles.bgcolorWhite, styles.paddingH5vw, styles.gap4vw, { paddingTop: vw(6), paddingBottom: vw(6) + insets.bottom, zIndex: 1, transform: [{ translateY: insets.bottom }] }]}>
-                <RoundBtn onPress={addToMyTree} title='Thêm cây vào vườn' bgColor={clrStyle.main2} customStyle={[styles.justifyContentCenter, styles.padding3vw, styles.flex1]} textClass={Nunito16Bold} textColor='white' />
+                <RoundBtn onPress={isInMyTree ? () => navigation.navigate('CareDetail', { tree: route.params.tree }) : addToMyTree} title={isInMyTree ? `Chăm sóc cây` : 'Thêm cây vào vườn'} bgColor={isInMyTree ? clrStyle.main4 : clrStyle.main2} customStyle={[styles.justifyContentCenter, styles.padding3vw, styles.flex1]} textClass={Nunito16Bold} textColor='white' />
                 <TouchableOpacity onPress={addToFav}
                     style={[styles.justifyContentCenter, styles.padding3vw, styles.border1, styles.borderRadius10, { borderColor: clrStyle.grey2 }]}>
                     {SVG.heartFilled(vw(6), vw(6), isFav ? clrStyle.main6 : clrStyle.grey2)}

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert } from 'react-native'
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { BannerSliderWithCenter, NotiBanner, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRow, ViewRowBetweenCenter, ViewRowCenter } from '../assets/Class'
+import { BannerSliderWithCenter, NotiBanner, SaveViewWithColorStatusBar, SSBar, SSBarWithSaveArea, TopNav, ViewCol, ViewColBetweenCenter, ViewRow, ViewRowBetweenCenter, ViewRowCenter, ViewRowStartCenter } from '../assets/Class'
 import { Nunito12Bold, Nunito12Reg, Nunito14Bold, Nunito14Reg, Nunito16Bold, Nunito18Bold, Nunito20Bold, } from '../assets/CustomText'
 import clrStyle, { componentStyle } from '../assets/componentStyleSheet'
 import styles, { vh, vw } from '../assets/stylesheet'
@@ -15,15 +15,16 @@ import { storageGetAllIDfromKey, storageGetItem, storageGetList, storageSaveAndO
 export default function CareDetail({ route }: any) {
     const navigation = useNavigation()
 
-    const [careHistory, setCareHistory] = useState<CareActivityFormat>()
+    const [careHistory, setCareHistory] = useState<CareActivityFormat[]>()
 
     let treeID = route.params?.tree?.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, '')
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            storageGetItem('careHistoryItem', treeID).then((res) => {
+            storageGetList('careHistoryItem').then((res) => {
                 if (res) {
-                    setCareHistory(res)
+                    const filtered = res.filter((item) => item.targetId === treeID)
+                    setCareHistory(filtered)
                 }
             })
         })
@@ -58,6 +59,7 @@ export default function CareDetail({ route }: any) {
                 await storageSaveAndOverwrite('careHistoryItem', data, `${treeID}-1}`)
                 Alert.alert('Đã ghi nhật ký chăm sóc')
             }
+            setCareHistory((prev) => (prev ? [data, ...prev] : [data]))
         } catch (error) {
             console.log(error);
             Alert.alert('Vui lòng thử lại - ', JSON.stringify(error))
@@ -66,7 +68,13 @@ export default function CareDetail({ route }: any) {
 
     return (
         <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
-            <TopNav title='Cây trồng của bạn' returnPreScreen returnPreScreenFnc={navigation.goBack} rightIcon={SVG.addTo(vw(6), vw(6), clrStyle.grey1)} />
+            <TopNav
+                title='Cây trồng của bạn'
+                returnPreScreen
+                returnPreScreenFnc={navigation.goBack}
+                rightIcon={SVG.addTo(vw(6), vw(6), clrStyle.grey1)}
+                rightFnc={() => { navigation.navigate('NewCare', { tree: route.params.tree }) }}
+            />
             <Nunito14Bold style={[styles.textCenter, styles.marginBottom4vw, { color: clrStyle.grey1 }]}>{route.params.tree.name}</Nunito14Bold>
             <ScrollView style={[styles.paddingH6vw, styles.flex1]} contentContainerStyle={[styles.gap4vw]}>
                 <Image source={route.params.tree.img} resizeMode='cover' resizeMethod='resize' style={[styles.w100, styles.h50vw, styles.borderRadius10] as ImageStyle} />
@@ -90,6 +98,31 @@ export default function CareDetail({ route }: any) {
                         <Nunito12Bold style={[styles.textCenter]}>Chăm sóc khác</Nunito12Bold>
                     </TouchableOpacity>
                 </ViewRowBetweenCenter>
+
+                <ViewRowBetweenCenter>
+                    <Nunito16Bold>Hoạt động chăm sóc</Nunito16Bold>
+                    <TouchableOpacity onPress={() => { }}
+                        style={[styles.padding2vw, styles.paddingH3vw, styles.borderRadius2vw, styles.bgcolorWhite]}>
+                        <Nunito12Bold color={clrStyle.main3}>Xem lịch</Nunito12Bold>
+                    </TouchableOpacity>
+                </ViewRowBetweenCenter>
+                {
+                    careHistory && careHistory.length > 0 ?
+                        <FlatList
+                            scrollEnabled={false}
+                            data={careHistory.sort((a, b) => b.time - a.time)}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <NotiBanner title={item.title} time={item.time} treeName={item.targetName} />
+                                )
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={[styles.gap4vw]}
+                        />
+                        :
+                        <Nunito14Reg style={[styles.textCenter, { color: clrStyle.grey1 }]}>Không có nội dung</Nunito14Reg>
+                }
             </ScrollView>
         </SSBarWithSaveArea>
     )

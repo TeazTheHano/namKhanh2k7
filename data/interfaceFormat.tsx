@@ -12,6 +12,7 @@ export interface StorageItem {
     nextCareItem: CareActivityFormat
     careHistoryList: CareActivityFormat[]
     careHistoryItem: CareActivityFormat
+    customCareActName: string[]
 }
 
 export interface UserFormat {
@@ -50,8 +51,10 @@ export interface ProductInfo {
 
 export interface CareActivityFormat {
     title: string,
-    time: Number,
+    time: number,
     targetId: string
     targetName: string
     targetImg: any
+    repeat?: string
+    note?: string
 }

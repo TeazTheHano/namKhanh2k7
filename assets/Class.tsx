@@ -1,6 +1,6 @@
 // system import
 import React, { Component, ComponentType, useMemo, useState } from 'react';
-import { ImageBackground, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View, Image, ImageStyle, StatusBarStyle, ReturnKeyType, KeyboardType, FlatList, TextInputProps, Animated, Easing, TouchableOpacityProps, ViewProps, ViewStyle } from 'react-native';
+import { ImageBackground, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View, Image, ImageStyle, StatusBarStyle, ReturnKeyType, KeyboardType, FlatList, TextInputProps, Animated, Easing, TouchableOpacityProps, ViewProps, ViewStyle, FlexStyle, TextStyle } from 'react-native';
 
 // style import
 import styles from './stylesheet';
@@ -574,6 +574,105 @@ export class ProcessBarSelfMade extends Component<{
 //     )
 // }
 
+
+export class DatalistInput extends React.Component<{
+    label?: string,
+    options: string[],
+    placeholder?: string,
+    onSelect?: (option: string) => void,
+    enableScroll?: boolean,
+    multiLine?: boolean,
+    TextClass?: React.ComponentType<{ children: React.ReactNode }>,
+    CustomStyle?: {
+        classStyle?: ViewStyle[] | FlexStyle[],
+        dropdownStyle?: ViewStyle[] | FlexStyle[],
+        dropdownItemStyle?: ViewStyle[] | FlexStyle[],
+        inputStyle?: ViewStyle[] | FlexStyle[],
+        textStyle?: TextStyle[],
+    }
+}> {
+    state = {
+        inputValue: '',
+        showDropdown: false,
+    };
+
+    filterOptions = (text: string) => {
+        const { options } = this.props;
+        return options.filter((option) =>
+            option.toLowerCase().includes(text.toLowerCase())
+        );
+    };
+
+    handleInputChange = (text: string) => {
+        this.setState({
+            inputValue: text,
+            showDropdown: text.length > 0,
+        });
+    };
+
+    handleOptionSelect = (option: string) => {
+        const { onSelect } = this.props;
+        this.setState({ inputValue: option, showDropdown: false });
+        onSelect?.(option); // Notify parent
+    };
+
+    handleBlur = () => {
+        const { inputValue } = this.state;
+        this.props.onSelect?.(inputValue); // Notify parent about free text input
+        this.setState({ showDropdown: false });
+    };
+
+    renderDropdown = (filteredOptions: string[]) => {
+        if (!this.state.showDropdown || filteredOptions.length === 0) return null;
+
+        return (
+            <FlatList
+                style={this.props.CustomStyle?.dropdownStyle}
+                data={filteredOptions}
+                keyboardShouldPersistTaps="always"
+                keyboardDismissMode="on-drag"
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={this.props.enableScroll}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={this.props.CustomStyle?.dropdownItemStyle}
+                        onPress={() => this.handleOptionSelect(item)}
+                    >
+                        {
+                            this.props.TextClass ?
+                                <this.props.TextClass style={this.props.CustomStyle?.textStyle}>{item}</this.props.TextClass> :
+                                <Text style={this.props.CustomStyle?.textStyle}>{item}</Text>
+                        }
+                    </TouchableOpacity>
+                )}
+            />
+        );
+    };
+
+    render() {
+        const { label, placeholder, CustomStyle, TextClass } = this.props;
+        const { inputValue } = this.state;
+        const Font = TextClass || Text;
+        const filteredOptions = this.filterOptions(inputValue);
+
+        return (
+            <View style={this.props.CustomStyle?.classStyle}>
+                {label && <Font style={this.props.CustomStyle?.textStyle}>{label}</Font>}
+                <TextInput
+                    style={this.props.CustomStyle?.textStyle}
+                    value={inputValue}
+                    multiline={this.props.multiLine}
+                    onChangeText={this.handleInputChange}
+                    placeholder={placeholder || 'Type to search...'}
+                    onBlur={this.handleBlur}
+                />
+                {this.renderDropdown(filteredOptions)}
+            </View>
+        );
+    }
+}
+
 export class LowBtn extends Component<{
     title: string,
     onPress: () => void,
@@ -838,16 +937,19 @@ export class NotiBanner extends Component<{ title: string, time: number, treeNam
         return (
             <ViewRowBetweenCenter style={[styles.flex1, styles.padding2vw, { borderBottomWidth: 1, borderColor: clrStyle.grey2 }]}>
                 <ViewRow style={[styles.flex1]}>
-                    <View style={[styles.paddingRight2vw, styles.marginRight2vw, { borderRightWidth: 1, borderColor: clrStyle.grey1 }]}><CTEXT.Nunito14Reg>{new Date(this.props.time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</CTEXT.Nunito14Reg></View>
+                    <ViewCol style={[styles.paddingRight2vw, styles.marginRight2vw, styles.alignItemsEnd, { borderRightWidth: 1, borderColor: clrStyle.grey1 }]}>
+                        <CTEXT.Nunito14Reg>{new Date(this.props.time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</CTEXT.Nunito14Reg>
+                        <CTEXT.Nunito12Reg color={clrStyle.grey1}>{new Date(this.props.time).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: '2-digit' })}</CTEXT.Nunito12Reg>
+                    </ViewCol>
                     <CTEXT.Nunito14Reg style={[styles.flex1]}>{this.props.title} cho {this.props.treeName}</CTEXT.Nunito14Reg>
                 </ViewRow>
 
                 {
                     this.props.title.toLowerCase().includes('tưới') ?
-                        SVG.wateringYellow(vw(9), vw(9))
+                        SVG.wateringYellow(vw(10), vw(10))
                         : this.props.title.toLowerCase().includes('bón') ?
-                            SVG.manure(vw(9), vw(9)) :
-                            SVG.changeMug(vw(9), vw(9))
+                            SVG.manure(vw(10), vw(10)) :
+                            SVG.changeMug(vw(10), vw(10))
                 }
 
             </ViewRowBetweenCenter>

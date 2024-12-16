@@ -151,6 +151,14 @@ export const iconRequireList = {
     "n1282": require('../assets/photos/weather/Night/moderate_or_heavy_snow_in_area_with_thunder.png'),
 }
 
+export const careActivityName = [
+    'Tưới cây',
+    'Bón phân',
+    'Thay đất',
+    'Xới đất',
+    'Tỉa lá',
+]
+
 export const treeData: FormatData.TreeDataFormat[] = [
     {
         img: require('../assets/photos/tree/tree1.png'),

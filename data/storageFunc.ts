@@ -124,7 +124,7 @@ export const storageSaveAndOverwrite = async <K extends keyof FORMATDATA.Storage
  */
 export const storageAddToList = async <K extends keyof FORMATDATA.StorageItem>(
   key: K,
-  item: FORMATDATA.StorageItem[K],
+  item: FORMATDATA.StorageItem[K] extends Array<infer T> ? T : never,
 ): Promise<boolean> => {
   try {
     console.log(item);
@@ -152,7 +152,7 @@ export const storageAddToList = async <K extends keyof FORMATDATA.StorageItem>(
         return false;
       }
     }
-    return storageSaveAndOverwrite(key, item);
+    return storageSaveAndOverwrite(key, [item] as any);
   } catch (error) {
     console.error(`Failed to add item to list for key: ${key}`, error);
     return false;
