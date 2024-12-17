@@ -624,7 +624,7 @@ export class DatalistInput extends React.Component<{
 
     renderDropdown = (filteredOptions: string[]) => {
         if (!this.state.showDropdown || filteredOptions.length === 0) return null;
-
+        let CTEXT = this.props.TextClass || Text
         return (
             <FlatList
                 style={this.props.CustomStyle?.dropdownStyle}
@@ -639,11 +639,7 @@ export class DatalistInput extends React.Component<{
                         style={this.props.CustomStyle?.dropdownItemStyle}
                         onPress={() => this.handleOptionSelect(item)}
                     >
-                        {
-                            this.props.TextClass ?
-                                <this.props.TextClass style={this.props.CustomStyle?.textStyle}>{item}</this.props.TextClass> :
-                                <Text style={this.props.CustomStyle?.textStyle}>{item}</Text>
-                        }
+                        <CTEXT style={this.props.CustomStyle?.textStyle}>{item}</CTEXT>
                     </TouchableOpacity>
                 )}
             />
@@ -954,5 +950,82 @@ export class NotiBanner extends Component<{ title: string, time: number, treeNam
 
             </ViewRowBetweenCenter>
         )
+    }
+}
+
+
+import DateTimePicker, { AndroidNativeProps, DateTimePickerAndroid, IOSNativeProps } from '@react-native-community/datetimepicker';
+/**
+ * @description use to pick date and time
+ * @param mode : 'date' | 'time'
+ * @param onChange : to save useState value
+ * @param value : number | Date
+ * @param TextClass : text component
+ * @param localFormat : 'vi-VN' | 'en-US' | ...
+ * @param style : { class: ViewStyle[] | FlexStyle[], text: TextStyle[] }
+ */
+export class DatePicker extends React.Component<{
+    mode: IOSNativeProps['mode'] | AndroidNativeProps['mode'],
+    onChange: (event: any, selectedDate?: Date) => void,
+    value?: number | Date,
+    TextClass?: React.ComponentType<{ children: React.ReactNode }>,
+    localFormat?: string,
+    style?: {
+        class?: ViewStyle[] | FlexStyle[],
+        text?: TextStyle[]
+    },
+}> {
+    state = {
+        date: this.props.value ? new Date(this.props.value) : new Date(),
+        show: false,
+    };
+
+
+    onChange = (event: any, selectedDate?: Date) => {
+        if (selectedDate) {
+            this.setState({ show: false, date: selectedDate });
+            this.props.onChange(selectedDate);
+        } else {
+            this.setState({ show: false });
+        }
+    };
+
+    showMode = (currentMode: IOSNativeProps['mode'] | AndroidNativeProps['mode']) => {
+        this.setState({ show: true, mode: currentMode });
+    };
+
+    render() {
+        let CTEXT = this.props.TextClass || Text
+        let local = this.props.localFormat || 'vi-VN'
+        const getText = () => {
+            if (this.props.mode == 'date') {
+                return this.state.date.toLocaleDateString(local, { day: '2-digit', month: '2-digit', year: '2-digit' });
+            } else if (this.props.mode == 'time') {
+                return this.state.date.toLocaleTimeString(local, { hour: '2-digit', minute: '2-digit' });
+            } else {
+                return this.state.date.toLocaleString();
+            }
+        };
+
+        return (
+            <ViewCol style={[styles.gap2vw]}>
+                <TouchableOpacity
+                    style={this.props.style?.class}
+                    onPress={() => this.showMode(this.props.mode)}>
+                    <CTEXT style={this.props.style?.text}>{getText()}</CTEXT>
+                </TouchableOpacity>
+                {this.state.show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={this.state.date}
+                        mode={this.props.mode}
+                        is24Hour={true}
+                        onChange={this.onChange}
+                        // Change if needed
+                        style={[styles.alignSelfEnd]}
+                    />
+                )}
+            </ViewCol >
+        );
     }
 }

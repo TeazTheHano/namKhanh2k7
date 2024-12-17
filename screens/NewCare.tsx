@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert, RefreshControl, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Animated, Image, ImageStyle, FlatList, Easing, ScrollView, ImageBackground, Linking, Platform, Alert, RefreshControl, TextInput, StyleSheet, Button } from 'react-native'
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import * as CLASS from '../assets/Class'
 import * as CTEXT from '../assets/CustomText'
@@ -18,6 +18,10 @@ export default function NewCare({ route }: any) {
   const { treeID } = route.params
 
   const [careActName, setCareActName] = useState<string[]>(careActivityName);
+  const [careDate, setCareDate] = useState<Date | number>()
+  const [careTime, setCareTime] = useState<Date | number>()
+  const [careRepeat, setCareRepeat] = useState<string>('')
+  const [careNote, setCareNote] = useState<string>('')
 
   const [selectedName, setSelectedName] = useState<string>('');
 
@@ -74,20 +78,26 @@ export default function NewCare({ route }: any) {
         </CLASS.ViewRow>
         <CLASS.ViewRow style={[styles.gap1vw, styles.padding4vw, styles.borderRadius2vw, styles.bgcolorWhite, styles.alignItemsBaseline]}>
           <CTEXT.Nunito14Bold>Ngày bắt đầu: </CTEXT.Nunito14Bold>
-
+          <View style={[styles.flex1]}> <CLASS.DatePicker mode='date' onChange={setCareDate} style={{ class: [styles.alignSelfEnd,], text: [{ color: 'blue' }] }} /></View>
         </CLASS.ViewRow>
         <CLASS.ViewRow style={[styles.gap1vw, styles.padding4vw, styles.borderRadius2vw, styles.bgcolorWhite, styles.alignItemsBaseline]}>
           <CTEXT.Nunito14Bold>Giờ: </CTEXT.Nunito14Bold>
-
+          <View style={[styles.flex1]}> <CLASS.DatePicker mode='time' onChange={setCareTime} style={{ class: [styles.alignSelfEnd,], text: [{ color: 'blue' }] }} /> </View>
         </CLASS.ViewRow>
         <CLASS.ViewRow style={[styles.gap1vw, styles.padding4vw, styles.borderRadius2vw, styles.bgcolorWhite, styles.alignItemsBaseline]}>
           <CTEXT.Nunito14Bold>Lặp lại: </CTEXT.Nunito14Bold>
 
         </CLASS.ViewRow>
-        <CLASS.ViewRow style={[styles.gap1vw, styles.padding4vw, styles.borderRadius2vw, styles.bgcolorWhite, styles.alignItemsBaseline]}>
+        <CLASS.ViewCol style={[styles.gap1vw, styles.padding4vw, styles.borderRadius2vw, styles.bgcolorWhite, styles.alignItemsBaseline]}>
           <CTEXT.Nunito14Bold>Ghi chú: </CTEXT.Nunito14Bold>
-
-        </CLASS.ViewRow>
+          <TextInput
+            value={careNote}
+            onChangeText={setCareNote}
+            placeholder='Ghi chú'
+            style={[styles.flex1, styles.border1, styles.borderRadius2vw, styles.padding2vw, styles.w100, { borderColor: clrStyle.grey1 }]}
+            multiline
+          />
+        </CLASS.ViewCol>
       </ScrollView>
     </CLASS.SSBarWithSaveArea>
   )
