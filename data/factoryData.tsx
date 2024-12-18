@@ -159,6 +159,34 @@ export const careActivityName = [
     'Tỉa lá',
 ]
 
+export const ProUserList: FormatData.ProUserFormat[] = [
+    {
+        name: 'Lê Anh Tuấn',
+        role: 'Ths nông nghiệp',
+        sex: 'male',
+        pro: 'tree1',
+    },
+    {
+        name: 'Phạm Bá Quang',
+        role: 'Ths nông nghiệp',
+        sex: 'male',
+        pro: 'tree2'
+    },
+    {
+        name: 'Vũ Khánh Linh',
+        role: 'TS nông nghiệp',
+        sex: 'female',
+        pro: 'tree2',
+    },
+    {
+        name: 'Nguyễn Văn Thành',
+        role: 'TS nông nghiệp',
+        sex: 'male',
+        pro: 'tree3',
+    }
+
+]
+
 export const careRepeatMode = [[1, 'Hằng ngày'], [2, 'Hằng tuần'], [3, 'Hằng tháng'], [4, 'Thứ hai'], [5, 'Thứ ba'], [6, 'Thứ tư'], [7, 'Thứ năm'], [8, 'Thứ sáu'], [9, 'Thứ bảy'], [10, 'Chủ nhật'],]
 
 export const treeData: FormatData.TreeDataFormat[] = [

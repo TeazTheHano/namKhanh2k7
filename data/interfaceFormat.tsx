@@ -4,13 +4,9 @@ export interface StorageItem {
         lat: number,
         lng: number
     }
-    myTreeList: TreeDataFormat[],
     myTreeItem: TreeDataFormat,
-    favTreeList: TreeDataFormat[],
     favTreeItem: TreeDataFormat,
-    nextCareList: CareActivityFormat[]
     nextCareItem: CareActivityFormat
-    careHistoryList: CareActivityFormat[]
     careHistoryItem: CareActivityFormat
     customCareActName: string[]
 }
@@ -57,4 +53,12 @@ export interface CareActivityFormat {
     treeImg: any
     repeat?: number[]
     note?: string
+}
+
+export interface ProUserFormat {
+    name: string,
+    role: string,
+    email?: string
+    sex: 'male' | 'female',
+    pro: string
 }

@@ -26,6 +26,7 @@ import Cart from './screens/Cart';
 import CareDetail from './screens/CareDetail';
 import MyTreeList from './screens/MyTreeList';
 import NewCare from './screens/NewCare';
+import Chat from './screens/Chat';
 
 // ____________________END OF IMPORT_______________________
 
@@ -54,6 +55,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="CareDetail" component={CareDetail} />
           <Stack.Screen name="MyTreeList" component={MyTreeList} />
           <Stack.Screen name="NewCare" component={NewCare} />
+          <Stack.Screen name="Chat" component={Chat} />
         </Stack.Navigator>
       </NavigationContainer>
     </ProviderTotal>

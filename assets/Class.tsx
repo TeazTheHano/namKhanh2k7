@@ -1013,7 +1013,7 @@ export class DatePicker extends React.Component<{
     showMode = (currentMode: IOSNativeProps['mode'] | AndroidNativeProps['mode']) => {
         this.setState({ show: true, mode: currentMode });
     };
-    
+
     render() {
         let CTEXT = this.props.TextClass || Text
         let local = this.props.localFormat || 'vi-VN'

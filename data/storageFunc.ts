@@ -216,7 +216,7 @@ export const storageClearList = async <K extends keyof FORMATDATA.StorageItem>(k
   }
 }
 
-export const storageGetAllIDfromKey = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<string[] | false> => {
+export const storageGetAllIDfromKey = async <K extends keyof FORMATDATA.StorageItem>(key: K): Promise<Array<string> | false> => {
   try {
     const ret = await storage.getIdsForKey(key);
     return ret;
