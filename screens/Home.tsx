@@ -13,7 +13,7 @@ import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import Geolocation from '@react-native-community/geolocation';
 import Config from "react-native-config";
 import { TreeDataFormat } from '../data/interfaceFormat'
-import { onRefresh } from '../assets/component'
+import { marginBottomForScrollView, onRefresh } from '../assets/component'
 import { storageGetItem, storageGetList, storageSaveAndOverwrite } from '../data/storageFunc'
 
 export default function Home() {
@@ -33,7 +33,16 @@ export default function Home() {
   const [newsData, setNewsData] = useState();
 
   async function requestLocation() {
-    Geolocation.requestAuthorization(() => { Geolocation.getCurrentPosition(success, error, options) });
+    Geolocation.requestAuthorization(() => {
+      Geolocation.getCurrentPosition((res) => {
+        if (res && res.coords.latitude && res.coords.longitude) {
+          console.log(res.coords.latitude, res.coords.longitude);
+          success(res);
+        } else {
+          Geolocation.getCurrentPosition(success, error, options);
+        }
+      })
+    });
   }
 
   const success = (position: any) => {
@@ -283,6 +292,7 @@ export default function Home() {
           <Nunito14Bold style={[styles.padding2vw]}>Chưa có cây trồng</Nunito14Bold>}
 
         <Nunito20Bold color={clrStyle.main2} style={[styles.textCenter]}>Tin tức Nông nghiệp</Nunito20Bold>
+        {marginBottomForScrollView()}
       </ScrollView>
     </SSBarWithSaveArea >
   )

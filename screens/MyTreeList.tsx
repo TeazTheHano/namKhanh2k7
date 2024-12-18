@@ -109,7 +109,7 @@ export default function MyTreeList() {
           nextCare.length > 0 ?
             < FlatList
               data={nextCare.sort((a, b) => b.time - a.time)}
-              renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} treeName={item.targetName} />}
+              renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} treeName={item.treeName} />}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={[styles.gap4vw]}
@@ -128,7 +128,7 @@ export default function MyTreeList() {
                 return (
                   <ViewRowStartCenter style={[styles.gap2vw]}>
                     {MemorizedCheckedIcon}
-                    <NotiBanner title={item.title} time={item.time} treeName={item.targetName} />
+                    <NotiBanner title={item.title} time={item.time} treeName={item.treeName} />
                   </ViewRowStartCenter>
                 )
               }}

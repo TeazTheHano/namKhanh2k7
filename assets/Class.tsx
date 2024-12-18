@@ -1,6 +1,6 @@
 // system import
 import React, { Component, ComponentType, useMemo, useState } from 'react';
-import { ImageBackground, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View, Image, ImageStyle, StatusBarStyle, ReturnKeyType, KeyboardType, FlatList, TextInputProps, Animated, Easing, TouchableOpacityProps, ViewProps, ViewStyle, FlexStyle, TextStyle } from 'react-native';
+import { ImageBackground, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View, Image, ImageStyle, StatusBarStyle, ReturnKeyType, KeyboardType, FlatList, TextInputProps, Animated, Easing, TouchableOpacityProps, ViewProps, ViewStyle, FlexStyle, TextStyle, Keyboard } from 'react-native';
 
 // style import
 import styles from './stylesheet';
@@ -575,27 +575,28 @@ export class ProcessBarSelfMade extends Component<{
 // }
 
 
-export class DatalistInput extends React.Component<{
-    label?: string,
-    options: string[],
-    placeholder?: string,
-    onSelect?: (option: string) => void,
-    enableScroll?: boolean,
-    multiLine?: boolean,
-    TextClass?: React.ComponentType<{ children: React.ReactNode }>,
+export class DatalistInput extends Component<{
+    label?: string;
+    options: string[];
+    placeholder?: string;
+    onSelect: (option: string) => void;
+    enableScroll?: boolean;
+    multiLine?: boolean;
+    TextClass?: React.ComponentType<{ children: React.ReactNode }>;
     CustomStyle?: {
-        classStyle?: ViewStyle[] | FlexStyle[],
-        dropdownStyle?: ViewStyle[] | FlexStyle[],
-        dropdownItemStyle?: ViewStyle[] | FlexStyle[],
-        inputStyle?: ViewStyle[] | FlexStyle[],
-        textStyle?: TextStyle[],
-    }
+        classStyle?: ViewStyle[] | FlexStyle[];
+        dropdownStyle?: ViewStyle[] | FlexStyle[];
+        dropdownItemStyle?: ViewStyle[] | FlexStyle[];
+        inputStyle?: ViewStyle[] | FlexStyle[];
+        textStyle?: TextStyle[];
+    };
 }> {
     state = {
         inputValue: '',
         showDropdown: false,
     };
 
+    // Filters options based on the input text
     filterOptions = (text: string) => {
         const { options } = this.props;
         return options.filter((option) =>
@@ -603,43 +604,61 @@ export class DatalistInput extends React.Component<{
         );
     };
 
+    // Handles input change and updates dropdown visibility
     handleInputChange = (text: string) => {
         this.setState({
             inputValue: text,
             showDropdown: text.length > 0,
         });
+        this.props.onSelect(text); // Pass free text to the parent
     };
 
+    // Handles dropdown item selection
     handleOptionSelect = (option: string) => {
-        const { onSelect } = this.props;
-        this.setState({ inputValue: option, showDropdown: false });
-        onSelect?.(option); // Notify parent
+        Keyboard.dismiss(); // Dismiss the keyboard to prevent TextInput blur
+        this.setState(
+            {
+                inputValue: option,
+                showDropdown: false,
+            },
+            () => {
+                this.props.onSelect(option); // Notify parent of the selected value
+            }
+        );
     };
 
+    // Manages dropdown visibility on blur
     handleBlur = () => {
-        const { inputValue } = this.state;
-        this.props.onSelect?.(inputValue); // Notify parent about free text input
-        this.setState({ showDropdown: false });
+        // Delay dropdown hiding to allow dropdown item press
+        setTimeout(() => {
+            if (!this.state.inputValue) {
+                this.setState({ showDropdown: false });
+            }
+        }, 100);
     };
 
+    // Renders the dropdown list
     renderDropdown = (filteredOptions: string[]) => {
-        if (!this.state.showDropdown || filteredOptions.length === 0) return null;
-        let CTEXT = this.props.TextClass || Text
+        const { CustomStyle, TextClass } = this.props;
+        const CTEXT = TextClass || Text;
+
+        if (!this.state.showDropdown || filteredOptions.length === 0) {
+            return null;
+        }
+
         return (
             <FlatList
-                style={this.props.CustomStyle?.dropdownStyle}
+                style={CustomStyle?.dropdownStyle}
                 data={filteredOptions}
-                keyboardShouldPersistTaps="always"
-                keyboardDismissMode="on-drag"
-                showsVerticalScrollIndicator={false}
                 scrollEnabled={this.props.enableScroll}
+                keyboardShouldPersistTaps="handled" // Ensure taps are registered
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={this.props.CustomStyle?.dropdownItemStyle}
+                        style={CustomStyle?.dropdownItemStyle}
                         onPress={() => this.handleOptionSelect(item)}
                     >
-                        <CTEXT style={this.props.CustomStyle?.textStyle}>{item}</CTEXT>
+                        <CTEXT style={CustomStyle?.textStyle}>{item}</CTEXT>
                     </TouchableOpacity>
                 )}
             />
@@ -647,21 +666,22 @@ export class DatalistInput extends React.Component<{
     };
 
     render() {
-        const { label, placeholder, CustomStyle, TextClass } = this.props;
+        const { label, placeholder, CustomStyle, TextClass, multiLine } = this.props;
         const { inputValue } = this.state;
         const Font = TextClass || Text;
+
         const filteredOptions = this.filterOptions(inputValue);
 
         return (
-            <View style={this.props.CustomStyle?.classStyle}>
-                {label && <Font style={this.props.CustomStyle?.textStyle}>{label}</Font>}
+            <View style={CustomStyle?.classStyle}>
+                {label && <Font style={CustomStyle?.textStyle}>{label}</Font>}
                 <TextInput
-                    style={this.props.CustomStyle?.textStyle}
+                    style={CustomStyle?.inputStyle}
                     value={inputValue}
-                    multiline={this.props.multiLine}
-                    onChangeText={this.handleInputChange}
                     placeholder={placeholder || 'Type to search...'}
+                    onChangeText={this.handleInputChange}
                     onBlur={this.handleBlur}
+                    multiline={multiLine}
                 />
                 {this.renderDropdown(filteredOptions)}
             </View>
@@ -928,7 +948,7 @@ export class BannerSliderWithCenter extends Component<{
 
 export class NotiBanner extends Component<{ title: string, time: number, treeName: string }> {
     render(): React.ReactNode {
-        console.log(typeof this.props.time);
+        console.log(this.props.title);
 
         return (
             <ViewRowBetweenCenter style={[styles.flex1, styles.padding2vw, { borderBottomWidth: 1, borderColor: clrStyle.grey2 }]}>
@@ -993,7 +1013,7 @@ export class DatePicker extends React.Component<{
     showMode = (currentMode: IOSNativeProps['mode'] | AndroidNativeProps['mode']) => {
         this.setState({ show: true, mode: currentMode });
     };
-
+    
     render() {
         let CTEXT = this.props.TextClass || Text
         let local = this.props.localFormat || 'vi-VN'

@@ -21,12 +21,12 @@ export default function Noti() {
         {
             title: 'Tin tức 1',
             time: new Date(),
-            targetId: ``
+            treeID: ``
         },
         {
             title: 'Tin tức 2',
             time: new Date(),
-            targetId: ``
+            treeID: ``
         }
     ]
     return (

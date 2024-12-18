@@ -478,3 +478,36 @@ export const showInDeverlopFnc = () => {
 //     }
 // }
 // END OF UNIVERSE FUNCTION________________________________________
+
+export async function saveCareActFnc<K extends keyof FORMATDATA.StorageItem>(key: K, data: FORMATDATA.StorageItem[K], treeID: string, setCareHistory?: (item: any) => void): Promise<boolean> {
+    if (!treeID) {
+        console.error('saveCareActFnc: treeID is null or undefined');
+        Alert.alert('Vui lòng thử lại');
+        return false;
+    }
+
+    try {
+        const res = await STORAGEFNC.storageGetAllIDfromKey(key)
+        if (res && res.length > 0) {
+            const exist = res.filter((item) => item.startsWith(treeID))
+            console.log(exist);
+            const maxCount = exist.length
+            if (maxCount > 0) {
+                const ID = `${treeID}-${maxCount + 1}`
+                await STORAGEFNC.storageSaveAndOverwrite(key, data, ID)
+            } else {
+                await STORAGEFNC.storageSaveAndOverwrite(key, data, `${treeID}-1}`)
+            }
+        } else {
+            await STORAGEFNC.storageSaveAndOverwrite(key, data, `${treeID}-1`)
+        }
+        Alert.alert('Đã ghi nhật ký chăm sóc')
+        setCareHistory && setCareHistory((prev: any) => (prev ? [data, ...prev] : [data]))
+
+        return true
+    } catch (error) {
+        console.log(error);
+        Alert.alert('Vui lòng thử lại - ', JSON.stringify(error))
+        return false
+    }
+}

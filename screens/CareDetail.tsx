@@ -9,7 +9,7 @@ import * as SVG from '../assets/svgXml'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../data/store'
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
-import { marginBottomForScrollView } from '../assets/component'
+import { marginBottomForScrollView, saveCareActFnc } from '../assets/component'
 import { CareActivityFormat, TreeDataFormat } from '../data/interfaceFormat'
 import { storageGetAllIDfromKey, storageGetItem, storageGetList, storageSaveAndOverwrite } from '../data/storageFunc'
 export default function CareDetail({ route }: any) {
@@ -23,7 +23,7 @@ export default function CareDetail({ route }: any) {
         const unsubscribe = navigation.addListener('focus', () => {
             storageGetList('careHistoryItem').then((res) => {
                 if (res) {
-                    const filtered = res.filter((item) => item.targetId === treeID)
+                    const filtered = res.filter((item) => item.treeID === treeID)
                     setCareHistory(filtered)
                 }
             })
@@ -34,36 +34,12 @@ export default function CareDetail({ route }: any) {
     async function careFnc(kind: string) {
         const data: CareActivityFormat = {
             title: kind,
-            time: Date.now(),
-            targetId: treeID,
-            targetName: route.params.tree.name,
-            targetImg: route.params.tree.img
+            time: new Date().getTime(),
+            treeID: treeID,
+            treeName: route.params.tree.name,
+            treeImg: route.params.tree.img
         }
-        console.log(typeof data.time, data.time);
-
-        try {
-            const res = await storageGetAllIDfromKey('careHistoryItem')
-            if (res && res.length > 0) {
-                const exist = res.filter((item) => item.startsWith(treeID))
-                console.log(exist);
-                const maxCount = exist.length
-                if (maxCount > 0) {
-                    const ID = `${treeID}-${maxCount + 1}`
-                    await storageSaveAndOverwrite('careHistoryItem', data, ID)
-                    Alert.alert('Đã ghi nhật ký chăm sóc')
-                } else {
-                    await storageSaveAndOverwrite('careHistoryItem', data, `${treeID}-1}`)
-                    Alert.alert('Đã ghi nhật ký chăm sóc')
-                }
-            } else {
-                await storageSaveAndOverwrite('careHistoryItem', data, `${treeID}-1}`)
-                Alert.alert('Đã ghi nhật ký chăm sóc')
-            }
-            setCareHistory((prev) => (prev ? [data, ...prev] : [data]))
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Vui lòng thử lại - ', JSON.stringify(error))
-        }
+        await saveCareActFnc('careHistoryItem', data, treeID, setCareHistory)
     }
 
     return (
@@ -73,7 +49,7 @@ export default function CareDetail({ route }: any) {
                 returnPreScreen
                 returnPreScreenFnc={navigation.goBack}
                 rightIcon={SVG.addTo(vw(6), vw(6), clrStyle.grey1)}
-                rightFnc={() => { navigation.navigate('NewCare', { tree: route.params.tree }) }}
+                rightFnc={() => { navigation.navigate('NewCare', { tree: route.params.tree, treeID: treeID }) }}
             />
             <Nunito14Bold style={[styles.textCenter, styles.marginBottom4vw, { color: clrStyle.grey1 }]}>{route.params.tree.name}</Nunito14Bold>
             <ScrollView style={[styles.paddingH6vw, styles.flex1]} contentContainerStyle={[styles.gap4vw]}>
@@ -112,8 +88,10 @@ export default function CareDetail({ route }: any) {
                             scrollEnabled={false}
                             data={careHistory.sort((a, b) => b.time - a.time)}
                             renderItem={({ item, index }) => {
+                                console.log(item);
+                                
                                 return (
-                                    <NotiBanner title={item.title} time={item.time} treeName={item.targetName} />
+                                    <NotiBanner title={item.title} time={item.time} treeName={item.treeName} />
                                 )
                             }}
                             keyExtractor={(item, index) => index.toString()}

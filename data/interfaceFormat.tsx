@@ -52,9 +52,9 @@ export interface ProductInfo {
 export interface CareActivityFormat {
     title: string,
     time: number,
-    targetId: string
-    targetName: string
-    targetImg: any
-    repeat?: string
+    treeID: string
+    treeName: string
+    treeImg: any
+    repeat?: number[]
     note?: string
 }
