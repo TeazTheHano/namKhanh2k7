@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import styles, { vw } from '../assets/stylesheet'
 import { BoardingInput, BoardingNavigation, LowBtn, ProcessBarSelfMade } from '../assets/Class'
 import { Nunito18Bold, Nunito24Bold, Nunito24Reg, } from '../assets/CustomText'
-import { RegisterWithFirebaseHandle, statusBarTransparency } from '../assets/component'
+import { registerWithFirebase, statusBarTransparency } from '../assets/component'
 import clrStyle from '../assets/componentStyleSheet'
 import { useNavigation } from '@react-navigation/native'
 import { shareIcon, sharpLeftArrow, sharpRightArrow } from '../assets/svgXml'
@@ -66,7 +66,7 @@ export default function Register() {
             storageSaveUser(newUser).then((res) => {
                 setSaveStatus(res ? 2 : 1);
                 if (res) {
-                    RegisterWithFirebaseHandle(
+                    registerWithFirebase(
                         undefined,
                         createUserWithEmailAndPassword,
                         updateProfile,
@@ -76,11 +76,13 @@ export default function Register() {
                         storageSaveUser,
                         email,
                         accountName,
-                        password
+                        password,
+                        
                     ).then(() => {
                         setSaveStatus(3);
+                        console.log(CurrentCache.user);
                         navigation.navigate('DataCollect' as never);
-                    }).catch(error => {
+                    }).catch((error: any) => {
                         console.error("Registration error:", error);
                         setSaveStatus(1);
                     });

@@ -11,7 +11,6 @@ import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../da
 import { iconCodeList, iconRequireList, ProUserList, treeData } from '../data/factoryData'
 import { marginBottomForScrollView } from '../assets/component'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { storageClearList, storageGetAllIDfromKey, storageRemove } from '../data/storageFunc'
 
 export default function Cart() {
   const navigation = useNavigation();
@@ -21,7 +20,10 @@ export default function Cart() {
   return (
     <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
       <TopNav title='Giỏ hàng' returnPreScreen returnPreScreenFnc={navigation.goBack} />
-      
+
+      <ViewRowCenter style={[styles.flex1]}>
+        <Nunito16Bold>Tính năng mua hàng hiện thời chưa khả dụng</Nunito16Bold>
+      </ViewRowCenter>
     </SSBarWithSaveArea>
   )
 }

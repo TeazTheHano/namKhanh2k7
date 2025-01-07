@@ -41,6 +41,14 @@ export default function MyTreeList() {
 
         }
       })
+      storageGetList('nextCareItem').then((res) => {
+        if (res) {
+          setNextCare(
+            res.filter((item) => new Date(item.time).toDateString() === new Date().toDateString())
+              .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+          )
+        }
+      })
     })
     return unsubscribe
   }, [navigation])
@@ -107,8 +115,9 @@ export default function MyTreeList() {
         <Nunito14Bold style={[styles.margin2vw]}>Hôm nay</Nunito14Bold>
         {
           nextCare.length > 0 ?
-            < FlatList
-              data={nextCare.sort((a, b) => b.time - a.time)}
+            <FlatList
+              scrollEnabled={false}
+              data={nextCare}
               renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} treeName={item.treeName} />}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}

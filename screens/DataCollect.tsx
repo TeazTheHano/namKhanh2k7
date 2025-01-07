@@ -95,56 +95,66 @@ export default function DataCollect({ route }: any) {
 
 
     function currentStepAdjust(act: boolean) {
-        if (act && required[currentStep]?.toString().trim().length === 0) {
-            Alert.alert('Please fill in all fields');
-            return;
-        }
-        if (act && currentStep < list.length - 1) {
-            setShowGoBack(false);
-            setCurrentStep(currentStep + 1);
-        } else if (!act && currentStep > 0) {
-            setCurrentStep(currentStep - 1);
-        } else if (act && currentStep === list.length - 1) {
-            if (userInfo?.email) {
-                let data = {
-                    age: age,
-                    loginMethod: 'email',
-                    synced: true,
-                    dataCollect: true,
-                    data: {
-                        interest: interest,
-                        favTree: favorite,
-                        job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet'
-                    }
-                }
-                setUserInfo({ ...userInfo, age: age, dataCollect: true, synced: false, data: { interest: interest, favorite: favorite, job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet' } })
-                storageSaveUser(userInfo).then((res) => {
-                    console.log(res, 121);
-                    dispatch(currentSetUser(userInfo))
-
-                    writeDataToFirebase(data).then((res) => {
-                        console.log(136, res);
-                        if (res) {
-                            console.log('138 Data saved');
-                            storageSaveUser({ ...userInfo, synced: true, dataCollect: true }).then((res) => {
-                                if (res) {
-                                    storageGetUser().then((res) => {
-                                        console.log(res, 142);
-                                    })
-                                    console.log('141 Data saved');
-                                    navigation.navigate('BottomTab' as never);
-                                }
-                            })
+        console.log(CurrentCache.user, 100);
+        
+        try {
+            if (act && required[currentStep]?.toString().trim().length === 0) {
+                Alert.alert('Please fill in all fields');
+                return;
+            }
+            if (act && currentStep < list.length - 1) {
+                setShowGoBack(false);
+                setCurrentStep(currentStep + 1);
+            } else if (!act && currentStep > 0) {
+                setCurrentStep(currentStep - 1);
+            } else if (act && currentStep === list.length - 1) {
+                console.log('last step');
+                
+                console.log(userInfo);
+                if (userInfo?.email) {
+                    
+                    let data = {
+                        age: age,
+                        loginMethod: 'email',
+                        synced: true,
+                        dataCollect: true,
+                        data: {
+                            interest: interest,
+                            favTree: favorite,
+                            job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet'
                         }
-                    })
-                })
-            }
+                    }
+                    setUserInfo({ ...userInfo, age: age, dataCollect: true, synced: false, data: { interest: interest, favorite: favorite, job: Job?.trim().length > 0 ? Job.trim() : 'No Job yet' } })
+                    storageSaveUser(userInfo).then((res) => {
+                        console.log(res, 121);
+                        dispatch(currentSetUser(userInfo))
 
-        } else if (!act && currentStep === 0) {
-            setShowGoBack(true);
-            if (!act && showGoBack) {
-                navigation.goBack();
+                        writeDataToFirebase(data).then((res) => {
+                            console.log(136, res);
+                            if (res) {
+                                console.log('138 Data saved');
+                                storageSaveUser({ ...userInfo, synced: true, dataCollect: true }).then((res) => {
+                                    if (res) {
+                                        storageGetUser().then((res) => {
+                                            console.log(res, 142);
+                                        })
+                                        console.log('141 Data saved');
+                                        navigation.navigate('BottomTab' as never);
+                                    }
+                                })
+                            }
+                        })
+                    })
+                }
+
+            } else if (!act && currentStep === 0) {
+                setShowGoBack(true);
+                if (!act && showGoBack) {
+                    navigation.goBack();
+                }
             }
+        } catch (error) {
+            console.error('Error in currentStepAdjust function:', error);
         }
     }
 

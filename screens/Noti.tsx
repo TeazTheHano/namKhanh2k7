@@ -10,25 +10,35 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { currentSetCurrentWeather, currentSetLocation, RootContext } from '../data/store'
 import { iconCodeList, iconRequireList, treeData } from '../data/factoryData'
 import { CareActivityFormat } from '../data/interfaceFormat'
+import { storageGetList } from '../data/storageFunc'
+import { doTheCareOnSchedule } from '../assets/component'
 
 export default function Noti() {
     const navigation = useNavigation();
 
     const [CurrentCache, dispatch] = React.useContext(RootContext);
     const [showingCate, setShowingCate] = useState(0);
+    const [todayNoti, setTodayNoti] = useState<CareActivityFormat[]>([]);
+    const [futureNoti, setFutureNoti] = useState<CareActivityFormat[]>([]);
 
-    const noti: CareActivityFormat[] = [
-        {
-            title: 'Tin tức 1',
-            time: new Date(),
-            treeID: ``
-        },
-        {
-            title: 'Tin tức 2',
-            time: new Date(),
-            treeID: ``
-        }
-    ]
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            storageGetList('nextCareItem').then((res) => {
+                if (res) {
+                    setTodayNoti(
+                        res.filter((item) => new Date(item.time).toDateString() === new Date().toDateString())
+                            .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+                    )
+                    setFutureNoti(
+                        res.filter((item) => new Date(item.time).toDateString() !== new Date().toDateString())
+                            .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+                    )
+                }
+            })
+        })
+        return unsubscribe
+    }, [navigation])
+
     return (
         <SSBarWithSaveArea barContentStyle='dark-content' barColor={clrStyle.main1} bgColor={clrStyle.main1}>
             <TopNav title='Thông báo' returnPreScreen returnPreScreenFnc={() => navigation.goBack()} />
@@ -50,16 +60,20 @@ export default function Noti() {
                     <>
                         <Nunito14Bold style={[styles.margin2vw]}>Hôm nay</Nunito14Bold>
                         {
-                            noti.length > 0 ?
-                                < FlatList
-                                    data={noti}
-                                    renderItem={({ item, index }) => <NotiBanner title={item.title} time={item.time} />}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    showsVerticalScrollIndicator={false}
-                                    contentContainerStyle={[styles.gap4vw]}
-                                />
+                            todayNoti.length > 0 ?
+                                todayNoti.map((item, index) => <NotiBanner key={index} title={item.title} time={item.time} treeName={item.treeName} fnc={() => doTheCareOnSchedule(item)} />)
                                 :
                                 <Nunito14Reg style={[styles.textCenter, { color: clrStyle.grey1 }]}>Không có nội dung</Nunito14Reg>
+                        }
+
+                        {
+                            futureNoti.length > 0 ?
+                                <>
+                                    <Nunito14Bold style={[styles.margin2vw]}>Tương lai</Nunito14Bold>
+                                    {futureNoti.map((item, index) => <NotiBanner key={index} title={item.title} time={item.time} treeName={item.treeName} fnc={() => doTheCareOnSchedule(item)} />)}
+                                </>
+                                :
+                                null
                         }
                     </>
                     :

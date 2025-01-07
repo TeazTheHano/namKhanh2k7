@@ -946,12 +946,10 @@ export class BannerSliderWithCenter extends Component<{
     }
 }
 
-export class NotiBanner extends Component<{ title: string, time: number, treeName: string }> {
+export class NotiBanner extends Component<{ title: string, time: number, treeName: string, fnc?: () => void }> {
     render(): React.ReactNode {
-        console.log(this.props.title);
-
         return (
-            <ViewRowBetweenCenter style={[styles.flex1, styles.padding2vw, { borderBottomWidth: 1, borderColor: clrStyle.grey2 }]}>
+            <TouchableOpacity onPress={this.props.fnc} style={[styles.w100, styles.flexRowBetweenCenter, styles.padding2vw, { borderBottomWidth: 1, borderColor: clrStyle.grey2 }]}>
                 <ViewRow style={[styles.flex1]}>
                     <ViewCol style={[styles.paddingRight2vw, styles.marginRight2vw, styles.alignItemsEnd, { borderRightWidth: 1, borderColor: clrStyle.grey1 }]}>
                         <CTEXT.Nunito14Reg>{new Date(this.props.time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</CTEXT.Nunito14Reg>
@@ -968,7 +966,7 @@ export class NotiBanner extends Component<{ title: string, time: number, treeNam
                             SVG.changeMug(vw(10), vw(10))
                 }
 
-            </ViewRowBetweenCenter>
+            </TouchableOpacity>
         )
     }
 }
