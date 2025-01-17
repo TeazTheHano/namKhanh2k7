@@ -1,3 +1,9 @@
+![Simulator Screenshot - iPhone 16 Pro - 2025-01-17 at 20 28 14](https://github.com/user-attachments/assets/e2adcf64-4aa9-433a-a256-66f5875d1724)
+![Simulator Screenshot - iPhone 16 Pro - 2025-01-17 at 20 27 37](https://github.com/user-attachments/assets/08b60a6c-cd14-4308-a06f-85236ac72f79)
+![Simulator Screenshot - iPhone 16 Pro - 2025-01-17 at 20 27 31](https://github.com/user-attachments/assets/a8f3e8fe-3e18-44fb-af5d-64f0614d3036)
+![Simulator Screenshot - iPhone 16 Pro - 2025-01-17 at 20 27 07](https://github.com/user-attachments/assets/10c44083-2a86-4101-b6a4-0cd052966c24)
+
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
